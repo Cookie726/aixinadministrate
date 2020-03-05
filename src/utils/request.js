@@ -12,14 +12,35 @@ const service = axios.create({
 service.interceptors.response.use(
     response => {
         const res = response.data
-        if (res.code != 0) {
-            if (res.code === 1004) {
+        const code = res.code
+        if (code === 0) {
+            return res
+        } else if (code > 0 && code < 2000) {
+            if (code === 1004) {
                 Message({
-                    message: "无数据"
+                    message: "空数据",
+                    type: "info"
+                })
+            } else if (code === 1003) {
+                Message({
+                        message: "新密码和原密码相同",
+                        type: "error"
+                })
+            } else {
+                return res
+            }
+        } else if(code>=2000) {
+            if(code===2000) {
+                Message({
+                    message: "用户名或密码错误",
+                    type: "error"
+                })
+            } else if(code === 2001) {
+                Message({
+                    message: "参数为空",
+                    type: "warning"
                 })
             }
-        } else {
-            return res
         }
     }
 )
