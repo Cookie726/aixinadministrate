@@ -10,11 +10,6 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
-// filters.forEach(key => {
-//   console.log(key)
-// })
-// console.log(filters)
-// Vue.filters()
 router.afterEach(to => {
   var routerList = to.matched;
   store.commit("setCrumbList", routerList);
