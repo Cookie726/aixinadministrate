@@ -15,15 +15,15 @@ export function getCampus(campus) {
 /**
  * 获取订单状态信息
  * @export
- * @param {*} state
+ * @param {*} status
  * @returns
  */
-export function getSaleStatus(state) {
-    if (state === 1) {
+export function getSaleStatus(status) {
+    if (status === 1) {
         return "待确认"
-    } else if (state === 2) {
+    } else if (status === 2) {
         return "待取货"
-    } else if (state === 3) {
+    } else if (status === 3) {
         return "交易成功"
     } else {
         return "交易失败"

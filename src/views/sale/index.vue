@@ -7,53 +7,81 @@
         </el-collapse-item>
       </el-collapse>
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="good.goodsName" label="商品名称" align="center" min-width="240"></el-table-column>
-        <el-table-column prop="num" label="数量" align="center" width="100"></el-table-column>
-        <el-table-column prop="time" label="交易时间" align="center" width="100"></el-table-column>
+        <el-table-column
+          type="expand"
+          align="center"
+        >
+          <template slot-scope="{ row }">
+            <el-table :data="row.orderDetailList" border style="width: 400px">
+              <el-table-column align="center" prop="goods.goodsName" label="商品名称"></el-table-column>
+              <el-table-column align="center" prop="orderNum" label="购买数量"></el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="student.name"
+          align="center"
+          label="学生姓名"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="student.contact"
+          align="center"
+          label="电话号码"
+          width="120"
+        ></el-table-column>
+        <el-table-column align="center" label="价格">
+          <el-table-column align="center" label="服装币" prop="totalFuzhuang" width="100"></el-table-column>
+          <el-table-column align="center" label="日用币" prop="totalRiyong" width="100"></el-table-column>
+        </el-table-column>
+        <el-table-column label="交易时间" prop="createTime" align="center" width="240">
+        </el-table-column>
         <el-table-column label="校区" align="center" width="100">
           <template slot-scope="scope">
-            <p>{{scope.row.campus | getCampus}}</p>
+            <p>{{ scope.row.campus | getCampus }}</p>
           </template>
         </el-table-column>
-        <el-table-column prop="student.name" align="center" label="学生姓名" width="120"></el-table-column>
-        <el-table-column prop="student.contact" align="center" label="电话号码" width="120"></el-table-column>
         <el-table-column label="订单状态" align="center" width="100">
           <template slot-scope="scope">
-            <el-tag
-              effect="dark"
-              :type="tagType(scope.row.state)"
-            >{{scope.row.state | getSaleStatus}}</el-tag>
+            <el-tag effect="dark" :type="tagType(scope.row.status)">{{
+              scope.row.status | getSaleStatus
+            }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column min-width="90" width="220" align="center" label="操作">
+        <el-table-column min-width="200" align="center" label="操作">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.state === 1"
+              v-if="scope.row.status === 1"
               type="success"
               @click="onModifyState(scope.row.id, 2)"
               size="mini"
-            >确认订单</el-button>
+              >确认订单</el-button
+            >
             <el-button
-              v-if="scope.row.state === 1 || scope.row.state === 2"
+              v-if="scope.row.status === 1 || scope.row.status === 2"
               type="info"
               @click="onModifyState(scope.row.id, 4)"
               size="mini"
-            >取消订单</el-button>
+              >取消订单</el-button
+            >
             <el-button
-              v-if="scope.row.state === 3 || scope.row.state === 4"
+              v-if="scope.row.status === 3 || scope.row.status === 4"
               type="danger"
               @click="handleDelete(scope.row.id)"
               size="mini"
-            >删除订单</el-button>
+              >删除订单</el-button
+            >
           </template>
         </el-table-column>
+        <div slot="append">
+          <ax-pager
+            :pageSize="pageConfig.pageSize"
+            :currentPage="pageConfig.currentPage"
+            @pageChange="pageChange"
+            :total="800"
+          />
+        </div>
       </el-table>
-      <ax-pager
-        :pageSize="pageConfig.pageSize"
-        :currentPage="pageConfig.currentPage"
-        @pageChange="pageChange"
-        :total="800"
-      />
     </div>
   </div>
 </template>
@@ -67,60 +95,53 @@ export default {
     return {
       tableData: [
         {
-          good: {
-            goodsName: "本部香皂"
-          },
-          num: 72,
-          campus: false,
-          time: "2020-02-23",
-          state: 1,
+          id: 1,
+          createTime: "2020/03/15 12:24:48",
           student: {
             name: "潘炳名",
             contact: "16688318501"
           },
-          id: 1
+          status: 1,
+          totalRiyong: 10,
+          totalFuzhuang: 20,
+          campus: true,
+          orderDetailList: [
+            {
+              id: 1,
+              goods: {
+                goodsName: "牙刷"
+              },
+              orderNum: 2
+            },
+            {
+              id: 2,
+              goods: {
+                goodsName: "牙刷"
+              },
+              orderNum: 2
+            }
+          ]
         },
         {
-          good: {
-            goodsName: "本部香皂"
-          },
-          num: 72,
-          campus: false,
-          time: "2020-02-23",
-          state: 2,
+          id: 1,
+          createTime: "2020/03/15 12:24:48",
           student: {
             name: "潘炳名",
             contact: "16688318501"
           },
-          id: 2
-        },
-        {
-          good: {
-            goodsName: "本部香皂"
-          },
-          num: 72,
-          campus: false,
-          time: "2020-02-23",
-          state: 3,
-          student: {
-            name: "潘炳名",
-            contact: "16688318501"
-          },
-          id: 3
-        },
-        {
-          good: {
-            goodsName: "本部香皂"
-          },
-          num: 72,
-          campus: false,
-          time: "2020-02-23",
-          state: 4,
-          student: {
-            name: "潘炳名",
-            contact: "16688318501"
-          },
-          id: 4
+          status: 1,
+          totalRiyong: 10,
+          totalFuzhuang: 20,
+          campus: true,
+          orderDetailList: [
+            {
+              id: 1,
+              goods: {
+                goodsName: "牙刷"
+              },
+              orderNum: 2
+            }
+          ]
         }
       ],
       pageConfig: {
@@ -187,5 +208,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

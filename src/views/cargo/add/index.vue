@@ -5,7 +5,11 @@
         <el-input style="width: 320px" v-model.number="form.barcode"></el-input>
       </el-form-item>
       <el-form-item label="商品名称">
-        <el-input style="width: 320px" placeholder="请输入商品名称" v-model="form.goodsName"></el-input>
+        <el-input
+          style="width: 320px"
+          placeholder="请输入商品名称"
+          v-model="form.goodsName"
+        ></el-input>
       </el-form-item>
       <el-form-item label="规格" prop="specs">
         <el-input style="width: 320px" v-model="form.specs"></el-input>
@@ -30,7 +34,11 @@
         </el-input>
       </el-form-item>
       <el-form-item label="限购数量">
-        <el-input-number v-model="form.limitBuyNum" :min="-1" label="描述文字"></el-input-number>
+        <el-input-number
+          v-model="form.limitBuyNum"
+          :min="-1"
+          label="描述文字"
+        ></el-input-number>
         <span class="tips">注：-1 表示不限制购买数量</span>
       </el-form-item>
       <el-form-item v-if="form.limitBuyNum != -1" label="限购类型">
@@ -42,17 +50,15 @@
       <el-form-item label="商品图片">
         <el-upload
           class="upload-demo"
-          drag
-          :on-success="handleSuccess"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          list-type="picture"
+          action="http://www.bluemsun.work:8080/AixinMarket/upload"
+          list-type="picture-card"
+          :http-request="uploadImg"
+          :limit="1"
+          :on-exceed="onExceed"
         >
-          <i class="el-icon-upload"></i>
           <div class="el-upload__text">
-            将文件拖到此处，或
-            <em>点击上传</em>
+            点击上传
           </div>
-          <div class="el-upload__tip" slot="tip">*只能上传jpg/png文件</div>
         </el-upload>
       </el-form-item>
       <el-form-item label="商品种类" prop="goodsType">
@@ -81,6 +87,7 @@ import {
   isEmpty
 } from "../../../utils/validate";
 import { getGoodsTypeQueryIndexTable } from "../../../api/indexTable";
+import axios from "axios";
 export default {
   data() {
     const _validateBarcode = (rule, value, callback) => {
@@ -142,6 +149,12 @@ export default {
     });
   },
   methods: {
+    onExceed() {
+      this.$message({
+        message: "商品图片只能选取一张",
+        type: "error"
+      });
+    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -151,8 +164,14 @@ export default {
         }
       });
     },
-    handleSuccess(res, file) {
-      console.log(URL.createObjectURL(file.raw));
+    uploadImg(f) {
+      const url = "http://www.bluemsun.work:8080/AixinMarket/upload";
+      let formData = new FormData();
+      formData.append("imgFile", f.file);
+      axios
+        .post(url, formData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     }
   }
 };
