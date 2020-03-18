@@ -7,24 +7,84 @@
         </el-collapse-item>
       </el-collapse>
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="stuNum" label="学号" align="center" width="110"></el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" width="120"></el-table-column>
-        <el-table-column prop="departmentName" label="学院" align="center" min-width="120"></el-table-column>
-        <el-table-column prop="specialName" label="专业" align="center" width="120"></el-table-column>
-        <el-table-column prop="grade" label="年级" align="center" width="70"></el-table-column>
-        <el-table-column prop="imburseTypeName" label="资助对象类型" align="center" width="120"></el-table-column>
+        <el-table-column
+          prop="stuNum"
+          label="学号"
+          align="center"
+          width="110"
+        ></el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          align="center"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="departmentName"
+          label="学院"
+          align="center"
+          min-width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="specialName"
+          label="专业"
+          align="center"
+          width="120"
+        ></el-table-column>
+        <el-table-column
+          prop="grade"
+          label="年级"
+          align="center"
+          width="70"
+        ></el-table-column>
+        <el-table-column
+          prop="imburseTypeName"
+          label="资助对象类型"
+          align="center"
+          width="120"
+        ></el-table-column>
         <el-table-column label="校区" align="center" width="114">
           <template slot-scope="scope">
-            <p>{{scope.row.campus | getCampus}}</p>
+            <p>{{ scope.row.campus | getCampus }}</p>
           </template>
         </el-table-column>
-        <el-table-column prop="contact" align="center" width="120" label="电话号码"></el-table-column>
-        <el-table-column prop="balanceRiyong" label="日用币余额" width="100" align="center"></el-table-column>
-        <el-table-column prop="balanceFuzhuang" label="服装币余额" align="center" width="100"></el-table-column>
-        <el-table-column fixed="right" min-width="150" align="center" label="操作">
+        <el-table-column
+          prop="contact"
+          align="center"
+          width="120"
+          label="电话号码"
+        ></el-table-column>
+        <el-table-column
+          prop="balanceRiyong"
+          label="日用币余额"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="balanceFuzhuang"
+          label="服装币余额"
+          align="center"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          fixed="right"
+          min-width="150"
+          align="center"
+          label="操作"
+        >
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="handleModify(scope.row)">修改</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleModify(scope.row)"
+              >修改</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -32,7 +92,7 @@
         :pageSize="pageConfig.pageSize"
         :currentPage="pageConfig.currentPage"
         @pageChange="pageChange"
-        :total="800"
+        :total="total"
       ></ax-pager>
     </div>
     <div class="student-info" v-else>
@@ -42,9 +102,9 @@
 </template>
 
 <script>
-import AXPage from "../../../components/pager";
+import AXPage from "@/components/pager";
 import AXListQuery from "./components/query";
-import * as Student from "../../../api/student";
+import { getStudentList } from "@/api/student";
 import AXStudentInfo from "./components/studentInfo";
 export default {
   methods: {
@@ -64,36 +124,43 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      Student.getStudentList(data).then(res => {
-        this.tableData = res.data.studentList;
+      getStudentList(data).then(data => {
+        this.tableData = data.studentList;
+        this.total = data.total;
       });
     },
     pageChange(event) {
-      console.log(event);
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
-      console.log(this.pageConfig);
       let data = Object.assign({}, this.formInline, event);
-      console.log(data);
-      Student.getStudentList(data).then(res => {
-        this.tableData = res.data.studentList;
+      getStudentList(data).then(data => {
+        this.tableData = data.studentList;
+        this.total = data.total;
       });
     },
     cancel() {
       this.showInfo = false;
     },
     handleDelete(id) {
-      this.$confirm("是否删除改学生？", "提示").then(() => {
-        Student.deleteStudent({
-          id
-        });
-      });
+      console.log(id);
+      // this.$confirm("是否删除改学生？", "提示").then(() => {
+      //   Student.deleteStudent({
+      //     id
+      //   });
+      // });
     }
   },
-
+  mounted() {
+    getStudentList(this.pageConfig).then(data => {
+      console.log(data);
+      this.tableData = data.studentList;
+      this.total = data.total;
+    });
+  },
   data() {
     return {
       studentInfo: {},
+      total: 0,
       showInfo: false,
       formInline: {
         stuNum: "",

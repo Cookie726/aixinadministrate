@@ -2,9 +2,6 @@
   <div class="query">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <div>
-        <el-form-item label="商品名称">
-          <el-input v-model="formInline.goodsName"></el-input>
-        </el-form-item>
         <el-form-item label="校区">
           <el-select v-model="formInline.campus">
             <el-option
@@ -45,7 +42,6 @@ export default {
   data() {
     return {
       formInline: {
-        goodsName: "",
         campus: "",
         name: "",
         state: "",

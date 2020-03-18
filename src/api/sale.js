@@ -1,4 +1,7 @@
-
+import {
+    get,
+    post
+} from "@/utils/request"
 /**
  * 获取订单记录
  * @export
@@ -7,6 +10,7 @@
  */
 export function getOrderList(data) {
     console.log(data)
+    return get("/admin/order", data)
 }
 
 /**
@@ -16,6 +20,7 @@ export function getOrderList(data) {
  */
 export function modifyState(data) {
     console.log(data)
+    return post("/order/updated", data)
 }
 
 /**

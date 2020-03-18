@@ -8,14 +8,16 @@ export default [{
     component: Stock,
     redirect: "stockRecord",
     meta: {
-        name: "进货管理"
+        name: "进货管理",
+        requireAuth: true
     },
     children: [{
             path: "record",
             name: "stockRecord",
             component: StockRecord,
             meta: {
-                name: "进货记录"
+                name: "进货记录",
+                requireAuth: true
             }
         },
         {
@@ -23,7 +25,8 @@ export default [{
             component: StockReplenish,
             name: "stockReplenish",
             meta: {
-                name: "进货"
+                name: "进货",
+                requireAuth: true
             }
         }
     ]

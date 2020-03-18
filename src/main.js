@@ -10,6 +10,30 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
+router.beforeEach((to, _, next) => {
+  if (to.matched.length != 0) {
+    if (to.meta.requireAuth) {
+      if (store.state.user.userInfo.name && store.state.user.userInfo.name != "") {
+        if (to.path === "/") {
+          next("/student/list")
+        } else {
+          next()
+        }
+      } else {
+        next({
+          path: "/login"
+        })
+      }
+    } else {
+      next()
+    }
+  } else {
+    next({
+      path: "/login"
+    })
+  }
+})
+
 router.afterEach(to => {
   var routerList = to.matched;
   store.commit("setCrumbList", routerList);

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { updateStudentInfo } from "../../../../api/student";
+import { updateStudentInfo } from "@/api/student";
 export default {
   data() {
     return {};

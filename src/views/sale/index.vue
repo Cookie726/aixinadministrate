@@ -7,14 +7,19 @@
         </el-collapse-item>
       </el-collapse>
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column
-          type="expand"
-          align="center"
-        >
+        <el-table-column type="expand" align="center">
           <template slot-scope="{ row }">
             <el-table :data="row.orderDetailList" border style="width: 400px">
-              <el-table-column align="center" prop="goods.goodsName" label="商品名称"></el-table-column>
-              <el-table-column align="center" prop="orderNum" label="购买数量"></el-table-column>
+              <el-table-column
+                align="center"
+                prop="goods.goodsName"
+                label="商品名称"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="orderNum"
+                label="购买数量"
+              ></el-table-column>
             </el-table>
           </template>
         </el-table-column>
@@ -31,10 +36,25 @@
           width="120"
         ></el-table-column>
         <el-table-column align="center" label="价格">
-          <el-table-column align="center" label="服装币" prop="totalFuzhuang" width="100"></el-table-column>
-          <el-table-column align="center" label="日用币" prop="totalRiyong" width="100"></el-table-column>
+          <el-table-column
+            align="center"
+            label="服装币"
+            prop="totalFuzhuang"
+            width="100"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            label="日用币"
+            prop="totalRiyong"
+            width="100"
+          ></el-table-column>
         </el-table-column>
-        <el-table-column label="交易时间" prop="createTime" align="center" width="240">
+        <el-table-column
+          label="交易时间"
+          prop="createTime"
+          align="center"
+          width="240"
+        >
         </el-table-column>
         <el-table-column label="校区" align="center" width="100">
           <template slot-scope="scope">
@@ -78,7 +98,7 @@
             :pageSize="pageConfig.pageSize"
             :currentPage="pageConfig.currentPage"
             @pageChange="pageChange"
-            :total="800"
+            :total="total"
           />
         </div>
       </el-table>
@@ -87,9 +107,9 @@
 </template>
 
 <script>
-import AXPager from "../../components/pager";
+import AXPager from "@/components/pager";
 import AXCampusQuery from "./components/query";
-import { getOrderList, modifyState, deleleOrder } from "../../api/sale";
+import { getOrderList, modifyState, deleleOrder } from "@/api/sale";
 export default {
   data() {
     return {
@@ -148,10 +168,14 @@ export default {
         pageSize: 100,
         currentPage: 1
       },
-      formInline: {
-        goodsName: ""
-      }
+      formInline: {},
+      total: 0
     };
+  },
+  mounted() {
+    getOrderList(this.pageConfig).then(({ total, orderRecordList }) => {
+      (this.total = total), (this.tableData = orderRecordList);
+    });
   },
   methods: {
     onModifyState(id, targetState) {
@@ -176,14 +200,17 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      getOrderList(data);
+      getOrderList(data).then(({ total, orderRecordList }) => {
+        (this.total = total), (this.tableData = orderRecordList);
+      });
     },
     pageChange(event) {
-      console.log(event);
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
       let data = Object.assign({}, this.formInline, event);
-      getOrderList(data);
+      getOrderList(data).then(({ total, orderRecordList }) => {
+        (this.total = total), (this.tableData = orderRecordList);
+      });
     }
   },
   computed: {

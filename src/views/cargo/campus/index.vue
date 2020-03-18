@@ -7,17 +7,31 @@
         </el-collapse-item>
       </el-collapse>
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="goodsName" label="商品名称" align="center" min-width="240"></el-table-column>
-        <el-table-column prop="number" label="商品库存量" align="center" width="300"></el-table-column>
+        <el-table-column
+          prop="goods.goodsName"
+          label="商品名称"
+          align="center"
+          min-width="240"
+        ></el-table-column>
+        <el-table-column
+          prop="num"
+          label="商品库存量"
+          align="center"
+          width="300"
+        ></el-table-column>
         <el-table-column label="校区" align="center" width="200">
           <template slot-scope="scope">
-            <p>{{scope.row.campus | getCampus}}</p>
+            <p>{{ scope.row.campus | getCampus }}</p>
           </template>
         </el-table-column>
         <el-table-column min-width="90" width="300" align="center" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)" size="small">修改</el-button>
-            <el-button type="text" @click="handleDelete(scope.row)" size="small">删除</el-button>
+            <el-button type="text" @click="handleEdit(scope.row)" size="small"
+              >修改</el-button
+            >
+            <el-button type="text" @click="handleDelete(scope.row)" size="small"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -25,27 +39,29 @@
         :pageSize="pageConfig.pageSize"
         :currentPage="pageConfig.currentPage"
         @pageChange="pageChange"
-        :total="800"
+        :total="total"
       />
     </div>
     <el-dialog title="修改" :visible.sync="dialogFormVisible">
       <el-form :model="editForm">
-        <el-form-item label="商品名称" :label-width="80">
+        <el-form-item label="商品名称" label-width="80">
           <el-input v-model="editForm.goodsName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import AXPager from "../../../components/pager";
+import AXPager from "@/components/pager";
 import AXCampusQuery from "./components/query";
-import * as Cargo from "../../../api/cargo";
+import { getWareList } from "@/api/cargo";
 export default {
   data() {
     return {
@@ -75,19 +91,25 @@ export default {
         pageSize: 100,
         currentPage: 1
       },
+      total: 0,
       formInline: {
         goodsName: ""
       },
       dialogFormVisible: false,
-      editForm: {
-        goodsName: ""
-      }
+      editForm: {}
     };
+  },
+  mounted() {
+    getWareList(this.pageConfig).then(({ wareHouseList, total }) => {
+      this.tableData = wareHouseList;
+      this.total = total;
+    });
   },
   methods: {
     handleEdit(row) {
-      this.editForm = row
-      this.dialogFormVisible = true
+      this.editForm = row;
+      console.log(this.editForm);
+      this.dialogFormVisible = true;
     },
     query(event) {
       console.log(event);
@@ -102,19 +124,18 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      Cargo.getGoodsList(data).then(res => {
-        this.tableData = res.goodsList;
+      getWareList(data).then(({ wareHouseList, total }) => {
+        this.tableData = wareHouseList;
+        this.total = total;
       });
     },
     pageChange(event) {
-      console.log(event);
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
-      console.log(this.pageConfig);
       let data = Object.assign({}, this.formInline, event);
-      console.log(data);
-      Cargo.getGoodsList(data).then(res => {
-        this.tableData = res.goodsList;
+      getWareList(data).then(({ wareHouseList, total }) => {
+        this.tableData = wareHouseList;
+        this.total = total;
       });
     }
   },
@@ -125,5 +146,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

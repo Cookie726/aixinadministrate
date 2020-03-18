@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { getGoodsNameIndexTable } from "../../../../api/indexTable.js";
+import { getGoodsNameIndexTable } from "@/api/indexTable.js";
 export default {
   data() {
     return {
@@ -46,11 +46,11 @@ export default {
       goodsNameList: [],
       campusList: [
         {
-          campus: true,
+          campus: 2,
           name: "净月校区"
         },
         {
-          campus: false,
+          campus: 1,
           name: "本部校区"
         }
       ]

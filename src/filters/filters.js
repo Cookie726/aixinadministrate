@@ -5,9 +5,9 @@
  * @returns
  */
 export function getCampus(campus) {
-    if (campus) {
+    if (campus === 1) {
         return "本部校区"
-    } else {
+    } else if (campus === 2) {
         return "净月校区"
     }
 }
@@ -38,8 +38,8 @@ export function getSaleStatus(status) {
  */
 export function getMoneyType(moneyType) {
     if (moneyType === true) {
-        return "日用币"
-    } else {
         return "服装币"
+    } else {
+        return "日用币"
     }
 }

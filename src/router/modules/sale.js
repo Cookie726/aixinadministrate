@@ -4,7 +4,8 @@ export default [{
     path: "sale",
     name: "sale",
     meta: {
-        name: "销售记录"
+        name: "销售记录",
+        requireAuth: true
     },
     component: Sale
 }]

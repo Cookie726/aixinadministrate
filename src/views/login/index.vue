@@ -22,7 +22,12 @@
           />
         </el-form-item>
 
-        <el-tooltip v-model="capsTooltip" content="已开启大写" placement="right" manual>
+        <el-tooltip
+          v-model="capsTooltip"
+          content="已开启大写"
+          placement="right"
+          manual
+        >
           <el-form-item prop="password">
             <el-input
               type="password"
@@ -42,14 +47,15 @@
           type="primary"
           style="width:100%;margin-bottom:30px;"
           @click.native.prevent="handleLogin"
-        >登录</el-button>
+          >登录</el-button
+        >
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-import { login } from "../../api/login";
+import { login } from "@/api/login";
 export default {
   data() {
     return {
@@ -74,8 +80,9 @@ export default {
       this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
     },
     handleLogin() {
-      console.log(this.loginForm);
-      login(this.loginForm);
+      login(this.loginForm).then(({ name }) => {
+        this.$store.commit("user/LOGIN", { name });
+      });
     }
   }
 };

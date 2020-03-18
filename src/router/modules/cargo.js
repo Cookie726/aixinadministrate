@@ -9,21 +9,24 @@ export default [{
     component: Cargo,
     redirect: "cargoView",
     meta: {
-        name: "货物管理"
+        name: "货物管理",
+        requireAuth: true
     },
     children: [{
             path: "view",
             component: CargoView,
             name: "cargoView",
             meta: {
-                name: "查看商品"
+                name: "查看商品",
+                requireAuth: true
             }
         }, {
             path: "add",
             component: CargoAdd,
             name: "cargoAdd",
             meta: {
-                name: "添加商品"
+                name: "添加商品",
+                requireAuth: true
             }
         },
         {
@@ -31,7 +34,8 @@ export default [{
             component: Cargocampus,
             name: "cargocampus",
             meta: {
-                name: "校区库"
+                name: "校区库",
+                requireAuth: true
             }
         }
     ]

@@ -1,31 +1,16 @@
-export function getGoodsList() {
-    const demo = [{
-            barCode: "6921899980034",
-            goodsName: "水杯800ml",
-            specs: "800ml",
-            price: 7,
-            goodsType: "日用类",
-            moneyType: "日用币",
-            goodsTypeId: 2,
-            id: 5
-        },
-        {
-            barCode: "6921899980034",
-            goodsName: "水杯800ml",
-            specs: "800ml",
-            price: 7,
-            goodsType: "日用类",
-            moneyType: "日用币",
-            goodsTypeId: 2,
-            id: 5
-        }
-    ]
-    return new Promise(resolve => {
-        resolve({
-            total: 500,
-            goodsList: demo
-        })
-    })
+import {
+    get,
+    post
+} from "@/utils/request";
+
+export function getGoodsList(data) {
+    console.log(data)
+    return get("/goods/list", data)
+}
+
+export function updateGoods(data) {
+    console.log(data)
+    return post("/goods/update", data)
 }
 
 export function deleteRecord(id) {
@@ -33,9 +18,18 @@ export function deleteRecord(id) {
 }
 
 export function deleteDepository(id) {
-    console.log('删除的商品ID：', id)
+    const param = {
+        id
+    }
+    return post("/goods/delete", param)
 }
 
 export function addGoods(data) {
     console.log(data)
+    return post("/goods/add", data)
+}
+
+export function getWareList(data) {
+    console.log(data)
+    return get("/ware/list", data)
 }

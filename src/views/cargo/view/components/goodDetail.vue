@@ -4,17 +4,19 @@
       <el-form-item label="商品图片">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://bluemsun.work:8080/aixinMarket/upload"
+          :http-request="uploadImg"
           :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
         >
           <img v-if="detail.images" :src="detail.images" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="条形码">
-        <el-input style="width: 400px" v-model.number="detail.barcode"></el-input>
+        <el-input
+          style="width: 400px"
+          v-model.number="detail.barcode"
+        ></el-input>
       </el-form-item>
       <el-form-item label="商品名称">
         <el-input style="width: 400px" v-model="detail.goodsName"></el-input>
@@ -43,6 +45,7 @@
 </template>
 
 <script>
+import { updateGoods } from "@/api/cargo";
 export default {
   props: {
     detail: Object
@@ -52,18 +55,13 @@ export default {
   },
   methods: {
     onConfirm() {
-      console.log(this.detail);
+      updateGoods(this.detail);
     },
     onCancel() {
       this.$emit("cancel");
     },
-    handleAvatarSuccess(res, file) {
-      console.log(file);
-      this.detail.images = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      console.log(file);
-      return true;
+    uploadImg(f) {
+      console.log(f.file);
     }
   }
 };
@@ -84,7 +82,7 @@ export default {
   color: #8c939d;
   width: 178px;
   height: 178px;
-  line-height: 178px!important;
+  line-height: 178px !important;
   text-align: center;
 }
 .avatar {

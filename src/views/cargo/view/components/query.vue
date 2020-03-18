@@ -60,7 +60,6 @@ export default {
     console.log(this);
     getIndexTable().then(res => {
       this.goodsTypeList = res.goodsTypeList;
-      console.log(res);
     });
   },
   methods: {

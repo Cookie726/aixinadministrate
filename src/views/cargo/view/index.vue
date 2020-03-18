@@ -9,22 +9,58 @@
       <el-table :data="tableData" style="width: 100%" border>
         <el-table-column align="center" width="130" label="商品图片">
           <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px" :src="scope.row.images" fit="fit"></el-image>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.images"
+              fit="fit"
+            ></el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="barcode" label="条形码" align="center" width="180"></el-table-column>
-        <el-table-column prop="goodsName" label="商品名称" align="center" width="240"></el-table-column>
-        <el-table-column prop="specs" label="商品规格" align="center" min-width="100"></el-table-column>
-        <el-table-column prop="price" label="商品价格" align="center" width="90"></el-table-column>
-        <el-table-column prop="goodsType" label="商品种类" align="center" width="120"></el-table-column>
+        <el-table-column
+          prop="barcode"
+          label="条形码"
+          align="center"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          prop="goodsName"
+          label="商品名称"
+          align="center"
+          width="240"
+        ></el-table-column>
+        <el-table-column
+          prop="specs"
+          label="商品规格"
+          align="center"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="price"
+          label="商品价格"
+          align="center"
+          width="90"
+        ></el-table-column>
+        <el-table-column
+          prop="goodsType"
+          label="商品种类"
+          align="center"
+          width="120"
+        ></el-table-column>
         <el-table-column label="货币种类" align="center" width="120">
           <template slot-scope="scope">
-            <p>{{scope.row.moneyType | getMoneyType}}</p>
+            <p>{{ scope.row.moneyType | getMoneyType }}</p>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" min-width="90" align="center" label="操作">
+        <el-table-column
+          fixed="right"
+          min-width="90"
+          align="center"
+          label="操作"
+        >
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>
+            <el-button @click="handleClick(scope.row)" type="text" size="small"
+              >修改</el-button
+            >
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -33,7 +69,7 @@
         :pageSize="pageConfig.pageSize"
         :currentPage="pageConfig.currentPage"
         @pageChange="pageChange"
-        :total="800"
+        :total="total"
       />
     </div>
     <div v-else>
@@ -46,7 +82,7 @@
 import AXPager from "../../../components/pager";
 import AXViewQuery from "./components/query";
 import AXGoodDetail from "./components/goodDetail";
-import * as Cargo from "../../../api/cargo";
+import { getGoodsList } from "../../../api/cargo";
 export default {
   data() {
     return {
@@ -80,7 +116,8 @@ export default {
       },
       formInline: {},
       showDetail: false,
-      detail: {}
+      detail: {},
+      total: 0
     };
   },
   methods: {
@@ -101,24 +138,29 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      Cargo.getGoodsList(data).then(res => {
-        this.tableData = res.goodsList;
+      getGoodsList(data).then(({ goodsList, total }) => {
+        this.tableData = goodsList;
+        this.total = total;
       });
     },
     pageChange(event) {
-      console.log(event);
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
-      console.log(this.pageConfig);
       let data = Object.assign({}, this.formInline, event);
-      console.log(data);
-      Cargo.getGoodsList(data).then(res => {
-        this.tableData = res.goodsList;
+      getGoodsList(data).then(({ goodsList, total }) => {
+        this.tableData = goodsList;
+        this.total = total;
       });
     },
     cancel() {
       this.showDetail = false;
     }
+  },
+  mounted() {
+    getGoodsList(this.pageConfig).then(({ goodsList, total }) => {
+      this.tableData = goodsList;
+      this.total = total;
+    });
   },
   components: {
     "ax-pager": AXPager,
@@ -128,5 +170,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

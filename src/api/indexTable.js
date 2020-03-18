@@ -1,3 +1,6 @@
+import {
+    get
+} from "@/utils/request"
 export function getStudentListQueryIndexTable() {
     const demo = {
         code: 0,
@@ -194,52 +197,51 @@ export function getStudentListQueryIndexTable() {
 }
 
 export function getGoodsTypeQueryIndexTable() {
-    const demo = {
-        goodsTypeList: [{
-            goodsTypeId: 1,
-            goodsType: "日用类"
-        },{
-            goodsTypeId: 2,
-            goodsType: "服装类"
-        },{
-            goodsTypeId: 3,
-            goodsType: "生活类"
-        },{
-            goodsTypeId: 4,
-            goodsType: "学习类"
-        }]
-    }
-    return new Promise(resolve => {
-        resolve(demo)
-    })
+    return get("/goods/type")
+    // const demo = {
+    //     goodsTypeList: [{
+    //         goodsTypeId: 1,
+    //         goodsType: "日用类"
+    //     }, {
+    //         goodsTypeId: 2,
+    //         goodsType: "服装类"
+    //     }, {
+    //         goodsTypeId: 3,
+    //         goodsType: "生活类"
+    //     }, {
+    //         goodsTypeId: 4,
+    //         goodsType: "学习类"
+    //     }]
+    // }
+    // return new Promise(resolve => {
+    //     resolve(demo)
+    // })
 }
 
 export function getGoodsNameIndexTable() {
     const demo = {
-        goodsList: [
-            {
-                id: 1,
-                goodsName: "本部毛巾"
-            },{
-                id: 2,
-                goodsName: "本部香皂"
-            },{
-                id: 3,
-                goodsName: "自行车"
-            },{
-                id: 4,
-                goodsName: "羽绒服"
-            },{
-                id: 5,
-                goodsName: "运动裤"
-            },{
-                id: 6,
-                goodsName: "针织毛衣"
-            },{
-                id: 7,
-                goodsName: "牙刷"
-            },
-        ]
+        goodsList: [{
+            id: 1,
+            goodsName: "本部毛巾"
+        }, {
+            id: 2,
+            goodsName: "本部香皂"
+        }, {
+            id: 3,
+            goodsName: "自行车"
+        }, {
+            id: 4,
+            goodsName: "羽绒服"
+        }, {
+            id: 5,
+            goodsName: "运动裤"
+        }, {
+            id: 6,
+            goodsName: "针织毛衣"
+        }, {
+            id: 7,
+            goodsName: "牙刷"
+        }, ]
     }
     return new Promise(resolve => {
         resolve(demo)

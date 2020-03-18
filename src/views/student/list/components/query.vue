@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { getStudentListQueryIndexTable as getIndexTable } from "../../../../api/indexTable.js";
+import { getStudentListQueryIndexTable as getIndexTable } from "@/api/indexTable.js";
 export default {
   data() {
     return {

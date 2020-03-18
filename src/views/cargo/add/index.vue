@@ -27,8 +27,8 @@
             slot="prepend"
             placeholder="选择爱心币种类"
           >
-            <el-option label="日用币" value="0"></el-option>
-            <el-option label="服装币" value="1"></el-option>
+            <el-option label="日用币" :value="false"></el-option>
+            <el-option label="服装币" :value="true"></el-option>
           </el-select>
           <span slot="suffix" class="el-input__icon">元</span>
         </el-input>
@@ -43,22 +43,19 @@
       </el-form-item>
       <el-form-item v-if="form.limitBuyNum != -1" label="限购类型">
         <el-select v-model="form.limitBuyType">
-          <el-option label="学期限购" value="0"></el-option>
-          <el-option label="每月限购" value="1"></el-option>
+          <el-option label="学期限购" :value="true"></el-option>
+          <el-option label="每月限购" :value="false"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="商品图片">
-        <el-upload
-          class="upload-demo"
-          action="http://www.bluemsun.work:8080/AixinMarket/upload"
-          list-type="picture-card"
+      <el-form-item label="商品图片"
+        ><el-upload
+          class="avatar-uploader"
+          action="http://www.liskarm.xyz/AixinMarket/upload"
+          :show-file-list="false"
           :http-request="uploadImg"
-          :limit="1"
-          :on-exceed="onExceed"
         >
-          <div class="el-upload__text">
-            点击上传
-          </div>
+          <img v-if="form.images" :src="form.images" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="商品种类" prop="goodsType">
@@ -66,8 +63,8 @@
           <el-option
             v-for="item in goodsTypeList"
             :key="item.goodsTypeId"
-            :label="item.goodsType"
-            :value="item.goodsTypeId"
+            :label="item.classification"
+            :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -85,8 +82,9 @@ import {
   validatePrice,
   validateSpecs,
   isEmpty
-} from "../../../utils/validate";
-import { getGoodsTypeQueryIndexTable } from "../../../api/indexTable";
+} from "@/utils/validate";
+import { getGoodsTypeQueryIndexTable } from "@/api/indexTable";
+import { addGoods } from "@/api/cargo";
 import axios from "axios";
 export default {
   data() {
@@ -145,6 +143,7 @@ export default {
   },
   mounted() {
     getGoodsTypeQueryIndexTable().then(res => {
+      console.log("goodsType", res);
       this.goodsTypeList = res.goodsTypeList;
     });
   },
@@ -158,19 +157,19 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log("d");
+          addGoods(this.form);
         } else {
           return false;
         }
       });
     },
     uploadImg(f) {
-      const url = "http://www.bluemsun.work:8080/AixinMarket/upload";
+      const url = "http://www.liskarm.xyz/AixinMarket/upload";
       let formData = new FormData();
       formData.append("imgFile", f.file);
       axios
         .post(url, formData)
-        .then(res => console.log(res))
+        .then(res => (this.form.images = res.data.filePath))
         .catch(err => console.log(err));
     }
   }

@@ -6,7 +6,8 @@ export default [{
     path: "student",
     name: "student",
     meta: {
-        name: "学生管理"
+        name: "学生管理",
+        requireAuth: true
     },
     redirect: "studentList",
     component: Student,
@@ -15,7 +16,8 @@ export default [{
             name: "studentList",
             component: StudentList,
             meta: {
-                name: "学生信息管理"
+                name: "学生信息管理",
+                requireAuth: true
             }
         },
         {
@@ -23,7 +25,8 @@ export default [{
             name: "studentDeposit",
             component: StudentDeposit,
             meta: {
-                name: "充值管理"
+                name: "充值管理",
+                requireAuth: true
             }
         }
     ]
