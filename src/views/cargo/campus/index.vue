@@ -29,7 +29,10 @@
             <el-button type="text" @click="handleEdit(scope.row)" size="small"
               >修改</el-button
             >
-            <el-button type="text" @click="handleDelete(scope.row)" size="small"
+            <el-button
+              type="text"
+              @click="handleDelete(scope.row.id)"
+              size="small"
               >删除</el-button
             >
           </template>
@@ -43,14 +46,14 @@
       />
     </div>
     <el-dialog title="修改" :visible.sync="dialogFormVisible">
-      <el-form :model="editForm">
-        <el-form-item label="商品名称" label-width="80">
-          <el-input v-model="editForm.goodsName" autocomplete="off"></el-input>
+      <el-form>
+        <el-form-item label="库存" label-width="80">
+          <el-input v-model="editNum" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button type="primary" @click="handleUpdateWarehouse"
           >确 定</el-button
         >
       </div>
@@ -61,32 +64,11 @@
 <script>
 import AXPager from "@/components/pager";
 import AXCampusQuery from "./components/query";
-import { getWareList } from "@/api/cargo";
+import { getWareList, updateWareHouse, deleteWareHouse } from "@/api/cargo";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          goodsName: "本部香皂",
-          number: 72,
-          campus: false
-        },
-        {
-          goodsName: "本部热水袋",
-          number: 176,
-          campus: true
-        },
-        {
-          goodsName: "本部毛巾",
-          number: 905,
-          campus: false
-        },
-        {
-          goodsName: "本部皂盒 ",
-          number: 752,
-          campus: false
-        }
-      ],
+      tableData: [],
       pageConfig: {
         pageSize: 100,
         currentPage: 1
@@ -96,7 +78,8 @@ export default {
         goodsName: ""
       },
       dialogFormVisible: false,
-      editForm: {}
+      editNum: 0,
+      editWareHouseId: ""
     };
   },
   mounted() {
@@ -107,9 +90,15 @@ export default {
   },
   methods: {
     handleEdit(row) {
-      this.editForm = row;
-      console.log(this.editForm);
+      this.editNum = row.num;
+      this.editWareHouseId = row.id;
       this.dialogFormVisible = true;
+    },
+    handleUpdateWarehouse() {
+      updateWareHouse({
+        num: this.editNum,
+        wareHouseId: this.editWareHouseId
+      });
     },
     query(event) {
       console.log(event);
@@ -137,6 +126,9 @@ export default {
         this.tableData = wareHouseList;
         this.total = total;
       });
+    },
+    handleDelete(id) {
+      deleteWareHouse({ wareHouseId: id });
     }
   },
   components: {

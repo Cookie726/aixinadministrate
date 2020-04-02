@@ -36,8 +36,8 @@
                     <td width="7%" align="center">地址</td>
                     <td bgcolor="#FFFFFF" align="center">
                       <el-select v-model="dataForm.campus">
-                        <el-option :value="true" label="净月校区"></el-option>
-                        <el-option :value="false" label="本部校区"></el-option>
+                        <el-option :value="1" label="净月校区"></el-option>
+                        <el-option :value="2" label="本部校区"></el-option>
                       </el-select>
                     </td>
                   </tr>

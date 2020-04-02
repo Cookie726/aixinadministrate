@@ -181,7 +181,7 @@ export default {
     onModifyState(id, targetState) {
       const req_data = {
         orderRecordId: id,
-        state: targetState
+        status: targetState
       };
       modifyState(req_data);
     },

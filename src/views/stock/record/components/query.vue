@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item label="校区">
         <el-select v-model="formInline.campus">
-          <el-option :value="true" label="净月校区"></el-option>
-          <el-option :false="false" label="本部校区"></el-option>
+          <el-option :value="1" label="净月校区"></el-option>
+          <el-option :value="2" label="本部校区"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>

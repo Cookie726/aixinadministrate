@@ -36,7 +36,7 @@
       </template>
       <el-menu-item @click="gotoRoute('stockReplenish')" index="stockReplenish">
         <div class="svg-container">
-          <svg-icon icon-class="donate-goods"></svg-icon>
+          <svg-icon icon-class="stock"></svg-icon>
         </div>
         <span>进货</span>
       </el-menu-item>

@@ -1,3 +1,7 @@
+import {
+    post,
+    get
+} from "../utils/request"
 
 /**
  * 获取进货列表
@@ -6,7 +10,7 @@
  * @returns
  */
 export function getStockRecord(data) {
-    console.log(data)
+    return get("/record/retrieval", data)
 }
 
 /**
@@ -17,4 +21,8 @@ export function getStockRecord(data) {
  */
 export function deleteRecord(data) {
     console.log(data)
+}
+
+export function checkin(data) {
+    return post("/ware/checkin", data)
 }

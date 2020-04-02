@@ -1,27 +1,35 @@
 <template>
-  <aside :class="{navCollapsed: isSidebarNavCollapse}" class="aside__top">
-    <i class="toggleNavCollapse " :class="{'el-icon-s-fold': !isSidebarNavCollapse, 'el-icon-s-unfold': isSidebarNavCollapse}" @click="toggleNavCollapse"></i>
+  <aside :class="{ navCollapsed: isSidebarNavCollapse }" class="aside__top">
+    <i
+      class="toggleNavCollapse "
+      :class="{
+        'el-icon-s-fold': !isSidebarNavCollapse,
+        'el-icon-s-unfold': isSidebarNavCollapse
+      }"
+      @click="toggleNavCollapse"
+    ></i>
     <el-breadcrumb separator="/">
       <transition-group name="breadcrumb">
-        <template v-for="(route,i) in crumbList">
+        <template v-for="(route, i) in crumbList">
           <el-breadcrumb-item
             :key="route.name"
-            :to="{name:route.name}"
-            v-if="route.name!='layout' && route.meta.name!='layout'"
-            :class="{'is-last-link':i==crumbList.length-1}"
-          >{{route.meta.name}}</el-breadcrumb-item>
+            :to="{ name: route.name }"
+            v-if="route.name != 'layout' && route.meta.name != 'layout'"
+            :class="{ 'is-last-link': i == crumbList.length - 1 }"
+            >{{ route.meta.name }}</el-breadcrumb-item
+          >
         </template>
       </transition-group>
     </el-breadcrumb>
     <div class="aside__top--right">
       <div class="user-msg">
         <span class="user-name">管理员</span>
-        <el-dropdown trigger="click" placement="top">
+        <el-dropdown @command="handleLogout" trigger="click" placement="top">
           <span class="el-dropdown-link">
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item command="handleLogout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -31,17 +39,25 @@
 
 <script>
 import { mapState } from "vuex";
+import { logout } from "@/api/user";
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     ...mapState(["isSidebarNavCollapse", "crumbList"])
   },
   methods: {
     toggleNavCollapse() {
-      this.$store.commit('toggleNavCollapse')
+      this.$store.commit("toggleNavCollapse");
+    },
+    handleLogout(command) {
+      console.log("logout");
+      if (command === "handleLogout") {
+        logout().then(() => {
+          this.$store.commit("user/LOGIN_OUT");
+        });
+      }
     },
     loginOut() {
       // this.$store.commit('LOGIN_OUT')
@@ -125,21 +141,21 @@ export default {
   }
 }
 .el-breadcrumb {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px;
-    margin-left: 5px;
-    .el-breadcrumb__inner {
-        &.is-link {
-            display: inline-block;
-            font-weight: normal;
-            color: #424040 !important;
-        }
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 5px;
+  .el-breadcrumb__inner {
+    &.is-link {
+      display: inline-block;
+      font-weight: normal;
+      color: #424040 !important;
     }
-    .is-last-link .is-link {
-        font-weight: normal;
-        color: #999 !important;
-    }
+  }
+  .is-last-link .is-link {
+    font-weight: normal;
+    color: #999 !important;
+  }
 }
 .breadcrumb-enter,
 .breadcrumb-leave-active {

@@ -1,7 +1,9 @@
 import axios from "axios"
-
+import router from "@/router/index"
 const BASE_URL = "http://www.liskarm.xyz/AixinMarket"
-
+import {
+    Message
+} from "element-ui"
 const http = axios.create({
     timeout: 1000 * 5,
     withCredentials: true,
@@ -12,9 +14,39 @@ const http = axios.create({
 })
 
 http.interceptors.response.use(function (response) {
-    console.log(response)
-    // 对响应数据做点什么
-    return response.data;
+    const code = response.data.code
+    if (code >= 2000) {
+        switch (code) {
+            case 2000:
+                Message({
+                    message: "账号或密码错误",
+                    type: "error"
+                })
+                break;
+            case 2003:
+                Message({
+                    message: "账号或密码错误",
+                    type: "error"
+                })
+                break;
+            default:
+                break;
+        }
+        return
+    } else {
+        switch (code) {
+            case 0:
+                break;
+            case 1002:
+                router.replace({
+                    name: "login"
+                })
+                break
+            default:
+                break;
+        }
+        return response.data
+    }
 }, function (error) {
     // 对响应错误做点什么
     return Promise.reject(error);
@@ -49,7 +81,7 @@ export function get(url, params = {}) {
  */
 export function post(url, data = {}) {
     return new Promise((resolve, reject) => {
-        http.post(url, JSON.stringify(data))
+        http.post(url, data)
             .then(response => {
                 resolve(response.data);
             }, err => {

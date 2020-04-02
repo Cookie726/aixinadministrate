@@ -2,13 +2,13 @@
   <div>
     <el-form v-model="form" label-width="90px">
       <el-form-item label="日用币" style="max-width: 200px">
-        <el-input-number v-model="form.riyong" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+        <el-input-number v-model="form.riyong" :min="0"></el-input-number>
       </el-form-item>
       <el-form-item label="服装币" style="max-width: 200px">
-        <el-input-number v-model="form.fuzhuang" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+        <el-input-number v-model="form.fuzhuang" :min="0"></el-input-number>
       </el-form-item>
       <el-form-item label="资助对象">
-        <el-select v-model="form.imburseTypeName" placeholder="请选择">
+        <el-select v-model="form.imburseType" placeholder="请选择">
           <el-option
             v-for="item in imburseType"
             :key="item.imburseType"
@@ -17,11 +17,15 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleCharge">充值</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import { onCharge } from "@/api/student";
 export default {
   data() {
     return {
@@ -41,10 +45,15 @@ export default {
       ],
       form: {
         riyong: 0,
-        fuzhuang: 1,
+        fuzhuang: 0,
         imburseType: ""
       }
     };
+  },
+  methods: {
+    handleCharge() {
+      onCharge(this.form);
+    }
   }
 };
 </script>

@@ -15,13 +15,15 @@ router.beforeEach((to, _, next) => {
     if (to.meta.requireAuth) {
       if (store.state.user.userInfo.name && store.state.user.userInfo.name != "") {
         if (to.path === "/") {
-          next("/student/list")
+          next({
+            name: "studentList"
+          })
         } else {
           next()
         }
       } else {
         next({
-          path: "/login"
+          name: "login"
         })
       }
     } else {
@@ -29,7 +31,7 @@ router.beforeEach((to, _, next) => {
     }
   } else {
     next({
-      path: "/login"
+      name: "login"
     })
   }
 })

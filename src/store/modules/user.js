@@ -5,10 +5,12 @@ export default {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"))
             if (!userInfo) {
                 localStorage.setItem("userInfo", JSON.stringify({
-                    name: ""
+                    name: "",
+                    id: ""
                 }))
                 userInfo = {
-                    name: ""
+                    name: "",
+                    id: ""
                 }
             }
             return userInfo

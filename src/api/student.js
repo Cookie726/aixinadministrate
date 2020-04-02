@@ -32,3 +32,7 @@ export function updateStudentInfo(data) {
 export function deleteStudent(data) {
   return post(data)
 }
+
+export function onCharge(data) {
+  return post("/admin/charge", data)
+}

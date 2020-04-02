@@ -9,19 +9,23 @@ export function getGoodsList(data) {
 }
 
 export function updateGoods(data) {
-    console.log(data)
     return post("/goods/update", data)
+}
+
+export function updateWareHouse(data) {
+    return post("/ware/update", data)
+}
+
+export function deleteWareHouse(data) {
+    return post("/ware/delete", data)
 }
 
 export function deleteRecord(id) {
     console.log('删除的提货记录ID：', id)
 }
 
-export function deleteDepository(id) {
-    const param = {
-        id
-    }
-    return post("/goods/delete", param)
+export function deleteDepository(data) {
+    return post("/goods/delete", data)
 }
 
 export function addGoods(data) {

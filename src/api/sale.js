@@ -19,8 +19,7 @@ export function getOrderList(data) {
  * @param {*} data
  */
 export function modifyState(data) {
-    console.log(data)
-    return post("/order/updated", data)
+    return post("/order/update", data)
 }
 
 /**

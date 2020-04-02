@@ -58,10 +58,15 @@
           label="操作"
         >
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small"
+            <el-button @click="handleEdit(scope.row)" type="text" size="small"
               >修改</el-button
             >
-            <el-button type="text" size="small">删除</el-button>
+            <el-button
+              type="text"
+              @click="handleDelete(scope.row.id)"
+              size="small"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -79,10 +84,10 @@
 </template>
 
 <script>
-import AXPager from "../../../components/pager";
+import AXPager from "@/components/pager";
 import AXViewQuery from "./components/query";
 import AXGoodDetail from "./components/goodDetail";
-import { getGoodsList } from "../../../api/cargo";
+import { getGoodsList, deleteDepository } from "@/api/cargo";
 export default {
   data() {
     return {
@@ -121,10 +126,14 @@ export default {
     };
   },
   methods: {
-    handleClick(row) {
+    handleEdit(row) {
       this.showDetail = true;
       this.detail = row;
-      console.log(row);
+    },
+    handleDelete(id) {
+      this.$confirm("是否要删除该商品？").then(() => {
+        deleteDepository({ id });
+      });
     },
     query(event) {
       let data = {

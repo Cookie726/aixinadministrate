@@ -3,11 +3,10 @@ import VueRouter from "vue-router";
 import Login from "../views/login";
 import Layout from "../views/layout";
 import RouterConfig from './modules'
-console.log("RouterConfig", RouterConfig)
 Vue.use(VueRouter);
 const routes = [{
     path: "/login",
-    name: "登录",
+    name: "login",
     component: Login,
     meta: {
       title: "登录",
@@ -27,7 +26,6 @@ const routes = [{
 ];
 
 const router = new VueRouter({
-  mode: "history",
   base: process.env.BASE_URL,
   routes
 });

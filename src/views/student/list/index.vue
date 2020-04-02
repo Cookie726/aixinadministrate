@@ -79,12 +79,6 @@
               @click="handleModify(scope.row)"
               >修改</el-button
             >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row.id)"
-              >删除</el-button
-            >
           </template>
         </el-table-column>
       </el-table>
@@ -140,14 +134,6 @@ export default {
     },
     cancel() {
       this.showInfo = false;
-    },
-    handleDelete(id) {
-      console.log(id);
-      // this.$confirm("是否删除改学生？", "提示").then(() => {
-      //   Student.deleteStudent({
-      //     id
-      //   });
-      // });
     }
   },
   mounted() {

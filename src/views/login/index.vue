@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { login } from "@/api/login";
+import { login } from "@/api/user";
 export default {
   data() {
     return {
@@ -80,8 +80,10 @@ export default {
       this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
     },
     handleLogin() {
-      login(this.loginForm).then(({ name }) => {
-        this.$store.commit("user/LOGIN", { name });
+      login(this.loginForm).then(({ name, id }) => {
+        this.$message.success("登录成功");
+        this.$router.replace({ name: "studentList" });
+        this.$store.commit("user/LOGIN", { name, id });
       });
     }
   }

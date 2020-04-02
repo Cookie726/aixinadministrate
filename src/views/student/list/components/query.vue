@@ -21,7 +21,11 @@
       <el-form-item label="专业">
         <el-select v-model="formInline.specialId">
           <template v-for="item in newSpecialList">
-            <el-option :key="item.specialId" :label="item.specialName" :value="item.specialId"></el-option>
+            <el-option
+              :key="item.specialId"
+              :label="item.specialName"
+              :value="item.specialId"
+            ></el-option>
           </template>
         </el-select>
       </el-form-item>
@@ -81,9 +85,9 @@ export default {
   mounted() {
     console.log(this);
     getIndexTable().then(res => {
-      this.specialList = res.data.specialList;
-      this.departmentList = res.data.departmentList;
-      this.imburseTypeList = res.data.imburseTypeList;
+      this.specialList = res.specialList;
+      this.departmentList = res.departmentList;
+      this.imburseTypeList = res.imburseTypeList;
       console.log(res);
     });
   },
@@ -92,9 +96,9 @@ export default {
       if (this.formInline.departmentId != "") {
         return this.specialList.filter(
           item => item.departmentId === this.formInline.departmentId
-        )
+        );
       } else {
-        return this.specialList
+        return this.specialList;
       }
     }
   },
@@ -106,5 +110,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
