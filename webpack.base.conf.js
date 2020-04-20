@@ -5,5 +5,5 @@ module.exports = {
         alias: {
             '@': resolve('src'),
         }
-    },
+    }
 }

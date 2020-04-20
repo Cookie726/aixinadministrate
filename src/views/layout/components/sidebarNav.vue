@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    :class="{navCollapsed:isSidebarNavCollapse}"
+    :class="{ navCollapsed: isSidebarNavCollapse }"
     :collapse="isSidebarNavCollapse"
     background-color="#304156"
     text-color="#eee"
@@ -83,20 +83,26 @@
 </template>
 
 <script>
-import "../../../icons/svg/donate.svg";
+import "@/icons/svg/donate.svg";
 import { mapState } from "vuex";
+import { Menu, Submenu, MenuItem } from "element-ui";
 export default {
   data() {
     return {};
   },
   computed: {
-    ...mapState(["isSidebarNavCollapse", "currentMenu"])
+    ...mapState(["isSidebarNavCollapse", "currentMenu"]),
   },
   methods: {
     gotoRoute(name) {
       this.$router.push({ name });
-    }
-  }
+    },
+  },
+  components: {
+    [Menu.name]: Menu,
+    [Submenu.name]: Submenu,
+    [MenuItem.name]: MenuItem
+  },
 };
 </script>
 

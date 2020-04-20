@@ -1,11 +1,7 @@
-import Stock from "../../views/stock"
-import StockReplenish from "../../views/stock/replenish"
-import StockRecord from "../../views/stock/record"
-
 export default [{
     path: "stock",
     name: "stock",
-    component: Stock,
+    component: resolve => require(["@/views/stock"], resolve),
     redirect: "stockRecord",
     meta: {
         name: "进货管理",
@@ -14,7 +10,7 @@ export default [{
     children: [{
             path: "record",
             name: "stockRecord",
-            component: StockRecord,
+            component: resolve => require(["@/views/stock/record"], resolve),
             meta: {
                 name: "进货记录",
                 requireAuth: true
@@ -22,7 +18,7 @@ export default [{
         },
         {
             path: "replenish",
-            component: StockReplenish,
+            component: resolve => require(["@/views/stock/replenish"], resolve),
             name: "stockReplenish",
             meta: {
                 name: "进货",

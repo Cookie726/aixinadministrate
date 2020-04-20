@@ -1,4 +1,6 @@
 const path = require('path');
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
 
 function resolve(dir) {
     return path.join(__dirname, dir)
@@ -6,6 +8,7 @@ function resolve(dir) {
 
 module.exports = {
     publicPath: "",
+    productionSourceMap: false,
     chainWebpack(config) {
         // set svg-sprite-loader
         config.module
@@ -23,5 +26,16 @@ module.exports = {
                 symbolId: 'icon-[name]'
             })
             .end()
+    },
+    configureWebpack: {
+        plugins: [
+            new CompressionWebpackPlugin({
+                filename: '[path].gz[query]', // 提示compression-webpack-plugin@3.0.0的话asset改为filename
+                algorithm: 'gzip',
+                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                threshold: 10240,
+                minRatio: 0.8
+            })
+        ]
     }
 }

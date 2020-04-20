@@ -22,7 +22,7 @@
         <el-form-item label="商品种类">
           <el-select v-model="formInline.goodsType">
             <template v-for="item in goodsTypeList">
-              <el-option :key="item.goodsType" :label="item.goodsTypeName" :value="item.goodsType"></el-option>
+              <el-option :key="item.id" :label="item.classification" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getGoodsTypeQueryIndexTable as getIndexTable } from "../../../../api/indexTable.js";
+import { getGoodsTypeQueryIndexTable as getIndexTable } from "@/api/indexTable.js";
 export default {
   data() {
     return {
@@ -57,7 +57,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this);
     getIndexTable().then(res => {
       this.goodsTypeList = res.goodsTypeList;
     });

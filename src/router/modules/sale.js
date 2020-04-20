@@ -1,5 +1,3 @@
-import Sale from "../../views/sale"
-
 export default [{
     path: "sale",
     name: "sale",
@@ -7,5 +5,5 @@ export default [{
         name: "销售记录",
         requireAuth: true
     },
-    component: Sale
+    component: resolve => require(["@/views/sale"], resolve)
 }]

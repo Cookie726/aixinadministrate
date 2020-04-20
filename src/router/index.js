@@ -1,24 +1,22 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Login from "../views/login";
-import Layout from "../views/layout";
 import RouterConfig from './modules'
 Vue.use(VueRouter);
 const routes = [{
     path: "/login",
     name: "login",
-    component: Login,
+    component: resolve => require(["@/views/login"], resolve),
     meta: {
-      title: "登录",
+      name: "管理员登录",
       requireAuth: false
     }
   },
   {
     path: "",
     name: "layout",
-    component: Layout,
+    component: resolve => require(["@/views/layout"], resolve),
     meta: {
-      title: 'layout',
+      name: 'layout',
       requireAuth: true
     },
     children: RouterConfig
@@ -26,7 +24,6 @@ const routes = [{
 ];
 
 const router = new VueRouter({
-  base: process.env.BASE_URL,
   routes
 });
 

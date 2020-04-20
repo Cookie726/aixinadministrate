@@ -20,7 +20,7 @@ export function getStudentList(options) {
  * @returns
  */
 export function updateStudentInfo(data) {
-  return post(data)
+  return post("/admin/studentEdit", data)
 }
 
 /**

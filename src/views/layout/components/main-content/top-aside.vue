@@ -52,17 +52,12 @@ export default {
       this.$store.commit("toggleNavCollapse");
     },
     handleLogout(command) {
-      console.log("logout");
       if (command === "handleLogout") {
         logout().then(() => {
-          this.$store.commit("user/LOGIN_OUT");
+          this.$store.commit("user/LOGOUT");
+          this.$router.replace({ name: "login" });
         });
       }
-    },
-    loginOut() {
-      // this.$store.commit('LOGIN_OUT')
-      // /* 防止切换角色时addRoutes重复添加路由导致出现警告 */
-      // window.location.reload()
     }
   }
 };

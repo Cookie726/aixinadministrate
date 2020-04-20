@@ -67,12 +67,20 @@
             :value="item.id"
           ></el-option>
         </el-select>
+        <el-button style="margin-left: 10px" @click="addGoodType"
+          >新增商品种类</el-button
+        >
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
+    <add-good-type
+      :dialogFormVisible="dialogFormVisible"
+      @confirm="dialogFormVisible = false"
+      @cancel="dialogFormVisible = false"
+    ></add-good-type>
   </div>
 </template>
 
@@ -85,7 +93,8 @@ import {
 } from "@/utils/validate";
 import { getGoodsTypeQueryIndexTable } from "@/api/indexTable";
 import { addGoods } from "@/api/cargo";
-import axios from "axios";
+import { uploadImage } from "@/api/uploadFile";
+import AddGoodType from "@/components/addGoodType";
 export default {
   data() {
     const _validateBarcode = (rule, value, callback) => {
@@ -101,6 +110,7 @@ export default {
       isEmpty(value, callback, "请选择商品类型");
     };
     return {
+      dialogFormVisible: false,
       form: {
         barcode: "",
         goodsName: "",
@@ -143,11 +153,13 @@ export default {
   },
   mounted() {
     getGoodsTypeQueryIndexTable().then(res => {
-      console.log("goodsType", res);
       this.goodsTypeList = res.goodsTypeList;
     });
   },
   methods: {
+    addGoodType() {
+      this.dialogFormVisible = true;
+    },
     onExceed() {
       this.$message({
         message: "商品图片只能选取一张",
@@ -157,6 +169,9 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if (this.form.limitBuyNum === -1) {
+            this.form.limitBuyType = null;
+          }
           addGoods(this.form);
         } else {
           return false;
@@ -164,35 +179,15 @@ export default {
       });
     },
     uploadImg(f) {
-      const url = "http://www.liskarm.xyz/AixinMarket/upload";
       let formData = new FormData();
       formData.append("imgFile", f.file);
-      axios
-        .post(url, formData)
-        .then(res => (this.form.images = res.data.filePath))
-        .catch(err => console.log(err));
+      uploadImage(formData).then(res => {
+        this.form.images = res.filepath;
+      });
     }
+  },
+  components: {
+    "add-good-type": AddGoodType
   }
 };
 </script>
-<style lang="scss">
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
-}
-
-.money-type-select {
-  width: 160px;
-  .el-input--suffix {
-    width: 160px;
-  }
-}
-
-.tips {
-  margin-left: 20px;
-  color: #f56c6c;
-  font-family: "Microsoft YaHei";
-}
-</style>

@@ -78,7 +78,11 @@
       />
     </div>
     <div v-else>
-      <ax-good-detail @cancel="cancel" :detail="detail"></ax-good-detail>
+      <ax-good-detail
+        @fresh="fresh"
+        @cancel="cancel"
+        :detail="detail"
+      ></ax-good-detail>
     </div>
   </div>
 </template>
@@ -91,32 +95,9 @@ import { getGoodsList, deleteDepository } from "@/api/cargo";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          barcode: "6921899980034",
-          goodsName: "水杯800ml",
-          specs: "800ml",
-          price: 7,
-          goodsType: "日用类",
-          moneyType: true,
-          goodsTypeId: 2,
-          id: 5,
-          images:
-            "http://pic1.zhimg.com/50/v2-68516323d2390cf88959d0b2a23378af_hd.jpg"
-        },
-        {
-          barcode: "6921899980034",
-          goodsName: "水杯800ml",
-          specs: "800ml",
-          price: 7,
-          goodsType: "日用类",
-          moneyType: false,
-          goodsTypeId: 2,
-          id: 5
-        }
-      ],
+      tableData: [],
       pageConfig: {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       },
       formInline: {},
@@ -126,9 +107,13 @@ export default {
     };
   },
   methods: {
+    fresh() {
+      this.showDetail = false;
+      this.setList(this.pageConfig);
+    },
     handleEdit(row) {
       this.showDetail = true;
-      this.detail = row;
+      this.detail = JSON.parse(JSON.stringify(row));
     },
     handleDelete(id) {
       this.$confirm("是否要删除该商品？").then(() => {
@@ -137,7 +122,7 @@ export default {
     },
     query(event) {
       let data = {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       };
       // 修改查询条件
@@ -147,29 +132,26 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      getGoodsList(data).then(({ goodsList, total }) => {
-        this.tableData = goodsList;
-        this.total = total;
-      });
+      this.setList(data);
     },
     pageChange(event) {
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
       let data = Object.assign({}, this.formInline, event);
+      this.setList(data);
+    },
+    cancel() {
+      this.showDetail = false;
+    },
+    setList(data) {
       getGoodsList(data).then(({ goodsList, total }) => {
         this.tableData = goodsList;
         this.total = total;
       });
-    },
-    cancel() {
-      this.showDetail = false;
     }
   },
   mounted() {
-    getGoodsList(this.pageConfig).then(({ goodsList, total }) => {
-      this.tableData = goodsList;
-      this.total = total;
-    });
+    this.setList(this.pageConfig);
   },
   components: {
     "ax-pager": AXPager,

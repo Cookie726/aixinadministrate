@@ -70,23 +70,21 @@ export default {
     return {
       tableData: [],
       pageConfig: {
-        pageSize: 100,
-        currentPage: 1
+        pageSize: 10,
+        currentPage: 1,
       },
       total: 0,
       formInline: {
-        goodsName: ""
+        goodsName: "",
       },
       dialogFormVisible: false,
       editNum: 0,
-      editWareHouseId: ""
+      editWareHouseId: "",
     };
   },
   mounted() {
-    getWareList(this.pageConfig).then(({ wareHouseList, total }) => {
-      this.tableData = wareHouseList;
-      this.total = total;
-    });
+    console.log("confirm", confirm);
+    this.setList(this.pageConfig);
   },
   methods: {
     handleEdit(row) {
@@ -97,14 +95,16 @@ export default {
     handleUpdateWarehouse() {
       updateWareHouse({
         num: this.editNum,
-        wareHouseId: this.editWareHouseId
+        wareHouseId: this.editWareHouseId,
+      }).then(() => {
+        this.dialogFormVisible = false;
+        this.setList(this.pageConfig);
       });
     },
     query(event) {
-      console.log(event);
       let data = {
-        pageSize: 100,
-        currentPage: 1
+        pageSize: 10,
+        currentPage: 1,
       };
       // 修改查询条件
       Object.assign(this.formInline, event);
@@ -113,28 +113,32 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      getWareList(data).then(({ wareHouseList, total }) => {
-        this.tableData = wareHouseList;
-        this.total = total;
-      });
+      this.setList(data);
     },
     pageChange(event) {
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
       let data = Object.assign({}, this.formInline, event);
+      this.setList(data);
+    },
+    handleDelete(id) {
+      this.confirm("是否要删除改库存记录?").then(() => {
+        deleteWareHouse({ wareHouseId: id }).then(() => {
+          this.dialogFormVisible = false;
+        });
+      });
+    },
+    setList(data) {
       getWareList(data).then(({ wareHouseList, total }) => {
         this.tableData = wareHouseList;
         this.total = total;
       });
     },
-    handleDelete(id) {
-      deleteWareHouse({ wareHouseId: id });
-    }
   },
   components: {
     "ax-pager": AXPager,
-    "ax-campus-query": AXCampusQuery
-  }
+    "ax-campus-query": AXCampusQuery,
+  },
 };
 </script>
 

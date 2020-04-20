@@ -1,7 +1,3 @@
-import Student from "../../views/student"
-import StudentList from "../../views/student/list"
-import StudentDeposit from "../../views/student/deposit"
-
 export default [{
     path: "student",
     name: "student",
@@ -10,11 +6,11 @@ export default [{
         requireAuth: true
     },
     redirect: "studentList",
-    component: Student,
+    component: resolve => require(["@/views/student"], resolve),
     children: [{
             path: "list",
             name: "studentList",
-            component: StudentList,
+            component: resolve => require(["@/views/student/list"], resolve),
             meta: {
                 name: "学生信息管理",
                 requireAuth: true
@@ -23,7 +19,7 @@ export default [{
         {
             path: "deposit",
             name: "studentDeposit",
-            component: StudentDeposit,
+            component: resolve => require(["@/views/student/deposit"], resolve),
             meta: {
                 name: "充值管理",
                 requireAuth: true

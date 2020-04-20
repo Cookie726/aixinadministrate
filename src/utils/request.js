@@ -29,6 +29,9 @@ http.interceptors.response.use(function (response) {
                     type: "error"
                 })
                 break;
+            case 2005:
+                Message.error(response.data.msg)
+                break;
             default:
                 break;
         }

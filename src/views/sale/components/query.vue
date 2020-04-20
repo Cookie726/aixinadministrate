@@ -42,19 +42,19 @@ export default {
   data() {
     return {
       formInline: {
-        campus: "",
-        name: "",
-        state: "",
-        stuNum: ""
+        campus: null,
+        name: null,
+        state: null,
+        stuNum: null
       },
       campusList: [
         {
-          campus: true,
-          name: "净月校区"
+          campus: 1,
+          name: "本部校区"
         },
         {
-          campus: false,
-          name: "本部校区"
+          campus: 2,
+          name: "净月校区"
         }
       ],
       orderStateList: [

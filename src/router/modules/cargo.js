@@ -1,12 +1,7 @@
-import Cargo from "../../views/cargo";
-import CargoAdd from "../../views/cargo/add";
-import Cargocampus from "../../views/cargo/campus";
-import CargoView from "../../views/cargo/view";
-
 export default [{
     path: "cargo",
     name: "cargo",
-    component: Cargo,
+    component: resolve => require(["@/views/cargo"], resolve),
     redirect: "cargoView",
     meta: {
         name: "货物管理",
@@ -14,7 +9,7 @@ export default [{
     },
     children: [{
             path: "view",
-            component: CargoView,
+            component: resolve => require(["@/views/cargo/view"], resolve),
             name: "cargoView",
             meta: {
                 name: "查看商品",
@@ -22,7 +17,7 @@ export default [{
             }
         }, {
             path: "add",
-            component: CargoAdd,
+            component: resolve => require(["@/views/cargo/add"], resolve),
             name: "cargoAdd",
             meta: {
                 name: "添加商品",
@@ -31,7 +26,7 @@ export default [{
         },
         {
             path: "campus",
-            component: Cargocampus,
+            component: resolve => require(["@/views/cargo/campus"], resolve),
             name: "cargocampus",
             meta: {
                 name: "校区库",

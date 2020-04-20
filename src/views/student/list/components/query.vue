@@ -83,12 +83,10 @@ export default {
     };
   },
   mounted() {
-    console.log(this);
     getIndexTable().then(res => {
       this.specialList = res.specialList;
       this.departmentList = res.departmentList;
       this.imburseTypeList = res.imburseTypeList;
-      console.log(res);
     });
   },
   computed: {

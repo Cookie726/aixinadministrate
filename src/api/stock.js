@@ -20,7 +20,7 @@ export function getStockRecord(data) {
  * @returns
  */
 export function deleteRecord(data) {
-    console.log(data)
+    return post("/record/retrievalDelete", data)
 }
 
 export function checkin(data) {

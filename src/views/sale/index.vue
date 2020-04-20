@@ -113,59 +113,9 @@ import { getOrderList, modifyState, deleleOrder } from "@/api/sale";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          createTime: "2020/03/15 12:24:48",
-          student: {
-            name: "潘炳名",
-            contact: "16688318501"
-          },
-          status: 1,
-          totalRiyong: 10,
-          totalFuzhuang: 20,
-          campus: true,
-          orderDetailList: [
-            {
-              id: 1,
-              goods: {
-                goodsName: "牙刷"
-              },
-              orderNum: 2
-            },
-            {
-              id: 2,
-              goods: {
-                goodsName: "牙刷"
-              },
-              orderNum: 2
-            }
-          ]
-        },
-        {
-          id: 1,
-          createTime: "2020/03/15 12:24:48",
-          student: {
-            name: "潘炳名",
-            contact: "16688318501"
-          },
-          status: 1,
-          totalRiyong: 10,
-          totalFuzhuang: 20,
-          campus: true,
-          orderDetailList: [
-            {
-              id: 1,
-              goods: {
-                goodsName: "牙刷"
-              },
-              orderNum: 2
-            }
-          ]
-        }
-      ],
+      tableData: [],
       pageConfig: {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       },
       formInline: {},
@@ -173,24 +123,30 @@ export default {
     };
   },
   mounted() {
-    getOrderList(this.pageConfig).then(({ total, orderRecordList }) => {
-      (this.total = total), (this.tableData = orderRecordList);
-    });
+    this.setList(this.pageConfig);
   },
   methods: {
     onModifyState(id, targetState) {
-      const req_data = {
-        orderRecordId: id,
-        status: targetState
-      };
-      modifyState(req_data);
+      this.$confirm("是否要执行改操作?").then(() => {
+        const req_data = {
+          orderRecordId: id,
+          status: targetState
+        };
+        modifyState(req_data).then(() => {
+          this.setList(this.pageConfig);
+        });
+      });
     },
     handleDelete(id) {
-      deleleOrder({ orderRecordId: id });
+      this.$confirm("是否要删除改订单").then(() => {
+        deleleOrder({ orderId: id }).then(() => {
+          this.setList(this.pageConfig);
+        });
+      });
     },
     query(event) {
       let data = {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       };
       // 修改查询条件
@@ -200,16 +156,18 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      getOrderList(data).then(({ total, orderRecordList }) => {
-        (this.total = total), (this.tableData = orderRecordList);
-      });
+      this.setList(data);
     },
     pageChange(event) {
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
       let data = Object.assign({}, this.formInline, event);
+      this.setList(data);
+    },
+    setList(data) {
       getOrderList(data).then(({ total, orderRecordList }) => {
-        (this.total = total), (this.tableData = orderRecordList);
+        this.total = total;
+        this.tableData = orderRecordList;
       });
     }
   },

@@ -16,8 +16,8 @@
       </el-form-item>
       <el-form-item label="校区">
         <el-select v-model="form.campus">
-          <el-option label="净月校区" :value="1"></el-option>
-          <el-option label="本部校区" :value="2"></el-option>
+          <el-option label="本部校区" :value="1"></el-option>
+          <el-option label="净月校区" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>

@@ -108,7 +108,7 @@ export default {
     },
     query(event) {
       let data = {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       };
       // 修改查询条件
@@ -138,7 +138,6 @@ export default {
   },
   mounted() {
     getStudentList(this.pageConfig).then(data => {
-      console.log(data);
       this.tableData = data.studentList;
       this.total = data.total;
     });
@@ -157,23 +156,9 @@ export default {
         grade: "",
         imburseType: ""
       },
-      tableData: [
-        {
-          id: 1,
-          stuNum: "2018010280",
-          name: "潘炳名",
-          departmentName: "信息科学与技术学院",
-          specialName: "软件工程",
-          grade: "2018",
-          imburseTypeName: "一般资助对象",
-          campus: true,
-          balanceRiyong: 20,
-          balanceFuzhuang: 100,
-          contact: "16688318502"
-        }
-      ],
+      tableData: [],
       pageConfig: {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       }
     };

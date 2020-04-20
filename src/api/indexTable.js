@@ -12,3 +12,7 @@ export function getGoodsTypeQueryIndexTable() {
 export function getGoodsNameIndexTable() {
     return get("/goods/name")
 }
+
+export function addGoodType(data) {
+    return get("/goods/addtype", data)
+}

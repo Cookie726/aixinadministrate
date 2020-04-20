@@ -29,5 +29,5 @@ export function modifyState(data) {
  * @returns
  */
 export function deleleOrder(data) {
-    console.log(data)
+    return post("/order/delete", data)
 }

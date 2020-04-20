@@ -39,7 +39,7 @@
           <template slot-scope="scope">
             <el-button
               type="danger"
-              @click="deleteRecord(scope.row.recordId)"
+              @click="deleteRecord(scope.row.id)"
               size="small"
               >删除</el-button
             >
@@ -64,12 +64,14 @@ export default {
   methods: {
     deleteRecord(id) {
       this.$confirm("是否要删除改记录？", "提示").then(() => {
-        deleteRecord({ id });
+        deleteRecord({ retrievalId: id }).then(() => {
+          this.setList(this.pageConfig);
+        });
       });
     },
     query(event) {
       let data = {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       };
       // 修改查询条件
@@ -101,7 +103,7 @@ export default {
     return {
       tableData: [],
       pageConfig: {
-        pageSize: 100,
+        pageSize: 10,
         currentPage: 1
       },
       formInline: {},

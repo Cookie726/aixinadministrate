@@ -61,10 +61,10 @@ export default {
     return {
       loginForm: {
         username: "",
-        password: ""
+        password: "",
       },
       capsTooltip: false,
-      loading: false
+      loading: false,
     };
   },
   mounted() {
@@ -82,11 +82,11 @@ export default {
     handleLogin() {
       login(this.loginForm).then(({ name, id }) => {
         this.$message.success("登录成功");
-        this.$router.replace({ name: "studentList" });
         this.$store.commit("user/LOGIN", { name, id });
+        this.$router.replace({ name: "studentList" });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -6,9 +6,9 @@
  */
 export function getCampus(campus) {
     if (campus === 1) {
-        return "净月校区"
-    } else if (campus === 2) {
         return "本部校区"
+    } else if (campus === 2) {
+        return "净月校区"
     }
 }
 

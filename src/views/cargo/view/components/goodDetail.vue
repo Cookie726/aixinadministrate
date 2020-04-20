@@ -4,7 +4,6 @@
       <el-form-item label="商品图片">
         <el-upload
           class="avatar-uploader"
-          action="http://bluemsun.work:8080/aixinMarket/upload"
           :http-request="uploadImg"
           :show-file-list="false"
         >
@@ -28,12 +27,37 @@
         <el-input style="width: 400px" v-model="detail.price"></el-input>
       </el-form-item>
       <el-form-item label="商品种类">
-        <el-input style="width: 400px" v-model="detail.goodsType"></el-input>
+        <el-select v-model="detail.goodsType">
+          <template v-for="item in goodsTypeList">
+            <el-option
+              :key="item.id"
+              :label="item.classification"
+              :value="item.id"
+            ></el-option>
+          </template>
+        </el-select>
+        <el-button style="margin-left: 10px" @click="addGoodType"
+          >新增商品种类</el-button
+        >
+      </el-form-item>
+      <el-form-item label="限购数量">
+        <el-input-number
+          v-model="detail.limitBuyNum"
+          :min="-1"
+          label="描述文字"
+        ></el-input-number>
+        <span class="tips">注：-1 表示不限制购买数量</span>
+      </el-form-item>
+      <el-form-item v-if="detail.limitBuyNum != -1" label="限购类型">
+        <el-select v-model="detail.limitBuyType">
+          <el-option label="学期限购" :value="true"></el-option>
+          <el-option label="每月限购" :value="false"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="货币种类">
         <el-select v-model="detail.moneyType">
-          <el-option :value="true" label="日用币"></el-option>
-          <el-option :value="false" label="服装币"></el-option>
+          <el-option :value="false" label="日用币"></el-option>
+          <el-option :value="true" label="服装币"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -41,53 +65,65 @@
         <el-button type="primary" @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
+    <add-good-type
+      :dialogFormVisible="dialogFormVisible"
+      @confirm="handleConfirm"
+      @cancel="dialogFormVisible = false"
+    ></add-good-type>
   </div>
 </template>
 
 <script>
+import { getGoodsTypeQueryIndexTable as getIndexTable } from "@/api/indexTable.js";
 import { updateGoods } from "@/api/cargo";
+import { uploadImage } from "@/api/uploadFile";
+import AddGoodType from "@/components/addGoodType";
 export default {
+  data() {
+    return {
+      goodsTypeList: {},
+      dialogFormVisible: false
+    };
+  },
   props: {
     detail: Object
   },
   mounted() {
-    console.log(this.detail);
+    getIndexTable().then(res => {
+      this.goodsTypeList = res.goodsTypeList;
+    });
   },
   methods: {
+    addGoodType() {
+      this.dialogFormVisible = true;
+    },
     onConfirm() {
-      updateGoods(this.detail);
+      if (this.detail.limitBuyNum === -1) {
+        this.detail.limitBuyType = null;
+      }
+      updateGoods(this.detail).then(() => {
+        this.$emit("fresh");
+      });
+    },
+    handleConfirm() {
+      this.dialogFormVisible = false;
+      getIndexTable().then(res => {
+        this.goodsTypeList = res.goodsTypeList;
+      });
     },
     onCancel() {
       this.$emit("cancel");
     },
     uploadImg(f) {
-      console.log(f.file);
+      let formData = new FormData();
+      formData.append("imgFile", f.file);
+      uploadImage(formData).then(res => {
+        this.detail.images = res.filepath;
+      });
     }
+  },
+  components: {
+    "add-good-type": AddGoodType
   }
 };
 </script>
-<style lang="scss">
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px !important;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>
