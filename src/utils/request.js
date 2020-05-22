@@ -1,9 +1,9 @@
 import axios from "axios"
 import router from "@/router/index"
 const BASE_URL = "http://www.liskarm.xyz/AixinMarket"
-import {
-    Message
-} from "element-ui"
+// import {
+//     Message
+// } from "element-ui"
 const http = axios.create({
     timeout: 1000 * 5,
     withCredentials: true,
@@ -18,19 +18,19 @@ http.interceptors.response.use(function (response) {
     if (code >= 2000) {
         switch (code) {
             case 2000:
-                Message({
+                window.ELEMENT.Message({
                     message: "账号或密码错误",
                     type: "error"
                 })
                 break;
             case 2003:
-                Message({
+                window.ELEMENT.Message({
                     message: "账号或密码错误",
                     type: "error"
                 })
                 break;
             case 2005:
-                Message.error(response.data.msg)
+                window.ELEMENT.Message.error(response.data.msg)
                 break;
             default:
                 break;

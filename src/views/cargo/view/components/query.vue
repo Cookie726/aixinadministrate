@@ -64,7 +64,7 @@ export default {
   methods: {
     onSubmit() {
       if(this.formInline.highPrice < this.formInline.lowPrice) {
-        this.$message.error("价格范围不正确")
+        window.ELEMENT.Message.error("价格范围不正确")
         return;
       }
       this.$emit("query", this.formInline);

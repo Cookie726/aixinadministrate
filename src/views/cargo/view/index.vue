@@ -116,7 +116,7 @@ export default {
       this.detail = JSON.parse(JSON.stringify(row));
     },
     handleDelete(id) {
-      this.$confirm("是否要删除该商品？").then(() => {
+      window.ELEMENT.MessageBox.confirm("是否要删除该商品？").then(() => {
         deleteDepository({ id });
       });
     },

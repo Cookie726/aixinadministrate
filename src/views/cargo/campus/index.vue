@@ -83,7 +83,6 @@ export default {
     };
   },
   mounted() {
-    console.log("confirm", confirm);
     this.setList(this.pageConfig);
   },
   methods: {
@@ -122,7 +121,7 @@ export default {
       this.setList(data);
     },
     handleDelete(id) {
-      this.confirm("是否要删除改库存记录?").then(() => {
+      window.ELEMENT.MessageBox.confirm("是否要删除改库存记录?").then(() => {
         deleteWareHouse({ wareHouseId: id }).then(() => {
           this.dialogFormVisible = false;
         });

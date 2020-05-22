@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { Dialog, Message } from "element-ui";
+// import { Dialog, Message } from "element-ui";
 import { addGoodType } from "@/api/indexTable";
 export default {
   props: {
@@ -36,7 +36,7 @@ export default {
   methods: {
     handleClick() {
       if (!this.classification) {
-        Message.error("商品种类不能为空");
+        window.ELEMENT.Message.error("商品种类不能为空");
         return;
       }
       addGoodType({ classification: this.classification });
@@ -46,9 +46,9 @@ export default {
       this.$emit("cancel");
     },
   },
-  components: {
-    [Dialog.name]: Dialog
-  },
+  // components: {
+  //   [Dialog.name]: Dialog
+  // },
 };
 </script>
 

@@ -63,7 +63,7 @@ import { getStockRecord, deleteRecord } from "@/api/stock";
 export default {
   methods: {
     deleteRecord(id) {
-      this.$confirm("是否要删除改记录？", "提示").then(() => {
+      window.ELEMENT.MessageBox.confirm("是否要删除改记录？", "提示").then(() => {
         deleteRecord({ retrievalId: id }).then(() => {
           this.setList(this.pageConfig);
         });

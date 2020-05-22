@@ -64,7 +64,7 @@ export default {
   methods: {
     onSubmit() {
       if (this.formInline.lowCount > this.formInline.highCount) {
-        this.$message.error("库存范围不正确");
+        window.ELEMENT.Message.error("库存范围不正确");
         return;
       }
       this.$emit("query", this.formInline);

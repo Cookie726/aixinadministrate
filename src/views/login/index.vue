@@ -81,7 +81,7 @@ export default {
     },
     handleLogin() {
       login(this.loginForm).then(({ name, id }) => {
-        this.$message.success("登录成功");
+        window.ELEMENT.Message.success("登录成功");
         this.$store.commit("user/LOGIN", { name, id });
         this.$router.replace({ name: "studentList" });
       });

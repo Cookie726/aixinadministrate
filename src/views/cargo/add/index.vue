@@ -161,7 +161,7 @@ export default {
       this.dialogFormVisible = true;
     },
     onExceed() {
-      this.$message({
+      window.ELEMENT.Message({
         message: "商品图片只能选取一张",
         type: "error"
       });

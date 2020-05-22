@@ -119,9 +119,11 @@ export default {
         balanceFuzhuang: this.dataForm.balanceFuzhuang,
         studentId: this.dataForm.id,
       };
-      this.$confirm("是否要修改学生信息", "提示").then(() => {
-        updateStudentInfo(data);
-      });
+      window.ELEMENT.MessageBox.confirm("是否要修改学生信息", "提示").then(
+        () => {
+          updateStudentInfo(data);
+        }
+      );
     },
   },
 };

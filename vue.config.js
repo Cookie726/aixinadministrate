@@ -26,6 +26,7 @@ module.exports = {
                 symbolId: 'icon-[name]'
             })
             .end()
+        config.resolve.alias.set("@", resolve('src'))
     },
     configureWebpack: {
         plugins: [
@@ -36,6 +37,13 @@ module.exports = {
                 threshold: 10240,
                 minRatio: 0.8
             })
-        ]
+        ],
+        externals: {
+            vue: 'Vue',
+            element: "ELEMENT",
+            "vue-router": "VueRouter",
+            'vuex': 'Vuex',
+            'axios': 'axios',
+        }
     }
 }

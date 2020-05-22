@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     onModifyState(id, targetState) {
-      this.$confirm("是否要执行改操作?").then(() => {
+      window.ELEMENT.MessageBox.confirm("是否要执行改操作?").then(() => {
         const req_data = {
           orderRecordId: id,
           status: targetState
@@ -138,7 +138,7 @@ export default {
       });
     },
     handleDelete(id) {
-      this.$confirm("是否要删除改订单").then(() => {
+      window.ELEMENT.MessageBox.confirm("是否要删除改订单").then(() => {
         deleleOrder({ orderId: id }).then(() => {
           this.setList(this.pageConfig);
         });

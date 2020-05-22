@@ -85,7 +85,6 @@
 <script>
 import "@/icons/svg/donate.svg";
 import { mapState } from "vuex";
-import { Menu, Submenu, MenuItem } from "element-ui";
 export default {
   data() {
     return {};
@@ -97,11 +96,6 @@ export default {
     gotoRoute(name) {
       this.$router.push({ name });
     },
-  },
-  components: {
-    [Menu.name]: Menu,
-    [Submenu.name]: Submenu,
-    [MenuItem.name]: MenuItem
   },
 };
 </script>
