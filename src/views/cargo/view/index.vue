@@ -6,7 +6,12 @@
           <ax-view-query @query="query"></ax-view-query>
         </el-collapse-item>
       </el-collapse>
-      <el-table :data="tableData" style="width: 100%" border>
+      <el-table
+        header-cell-style="background: #F5F7FA"
+        :data="tableData"
+        style="width: 100%"
+        border
+      >
         <el-table-column align="center" width="130" label="商品图片">
           <template slot-scope="scope">
             <el-image

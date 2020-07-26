@@ -6,7 +6,12 @@
           <ax-campus-query @query="query"></ax-campus-query>
         </el-collapse-item>
       </el-collapse>
-      <el-table :data="tableData" style="width: 100%" border>
+      <el-table
+        header-cell-style="background: #F5F7FA"
+        :data="tableData"
+        style="width: 100%"
+        border
+      >
         <el-table-column type="expand" align="center">
           <template slot-scope="{ row }">
             <el-table :data="row.orderDetailList" border style="width: 400px">

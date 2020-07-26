@@ -80,11 +80,19 @@ export default {
       this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
     },
     handleLogin() {
-      login(this.loginForm).then(({ data }) => {
-        window.ELEMENT.Message.success("登录成功");
-        this.$store.commit("user/LOGIN", { name: data.name, id: data.id });
-        this.$router.replace({ name: "studentList" });
-      });
+      login(this.loginForm)
+        .then(({ code, msg, data }) => {
+          if (code === 0) {
+            window.ELEMENT.Message.success("登录成功");
+            this.$store.commit("user/LOGIN", { name: data.name, id: data.id });
+            this.$router.replace({ name: "studentList" });
+          } else {
+            window.ELEMENT.Message.error(msg || "登录失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
     },
   },
 };

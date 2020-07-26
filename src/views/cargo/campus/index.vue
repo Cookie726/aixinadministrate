@@ -6,7 +6,12 @@
           <ax-campus-query @query="query"></ax-campus-query>
         </el-collapse-item>
       </el-collapse>
-      <el-table :data="tableData" style="width: 100%" border>
+      <el-table
+        header-cell-style="background: #F5F7FA"
+        :data="tableData"
+        style="width: 100%"
+        border
+      >
         <el-table-column
           prop="goods.goodsName"
           label="商品名称"

@@ -9,7 +9,6 @@ import {
  * @returns
  */
 export function getOrderList(data) {
-    console.log(data)
     return get("/admin/order", data)
 }
 
