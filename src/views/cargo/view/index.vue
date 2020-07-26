@@ -41,7 +41,7 @@
           width="90"
         ></el-table-column>
         <el-table-column
-          prop="goodsType"
+          prop="goodsTypeName"
           label="商品种类"
           align="center"
           width="120"
@@ -58,11 +58,14 @@
           label="操作"
         >
           <template slot-scope="scope">
-            <el-button @click="handleEdit(scope.row)" type="text" size="small"
+            <el-button
+              @click="handleEdit(scope.row)"
+              type="primary"
+              size="small"
               >修改</el-button
             >
             <el-button
-              type="text"
+              type="danger"
               @click="handleDelete(scope.row.id)"
               size="small"
               >删除</el-button

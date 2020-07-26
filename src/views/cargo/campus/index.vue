@@ -26,11 +26,14 @@
         </el-table-column>
         <el-table-column min-width="90" width="300" align="center" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleEdit(scope.row)" size="small"
+            <el-button
+              type="primary"
+              @click="handleEdit(scope.row)"
+              size="small"
               >修改库存</el-button
             >
             <el-button
-              type="text"
+              type="danger"
               @click="handleDelete(scope.row.id)"
               size="small"
               >删除</el-button
