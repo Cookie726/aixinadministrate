@@ -32,29 +32,42 @@ export default {
       imburseType: [
         {
           imburseType: 1,
-          imburseTypeName: "特别资助对象"
+          imburseTypeName: "特别资助对象",
         },
         {
           imburseType: 2,
-          imburseTypeName: "重点资助对象"
+          imburseTypeName: "重点资助对象",
         },
         {
           imburseType: 3,
-          imburseTypeName: "一般资助对象"
-        }
+          imburseTypeName: "一般资助对象",
+        },
       ],
       form: {
         riyong: 0,
         fuzhuang: 0,
-        imburseType: ""
-      }
+        imburseType: "",
+      },
     };
   },
   methods: {
     handleCharge() {
       onCharge(this.form);
-    }
-  }
+      window.ELEMENT.MessageBox.confirm("确认充值?", "确认消息").then(() => {
+        onCharge(this.form)
+          .then((res) => {
+            if (res.code === 0) {
+              window.ELEMENT.Message.success("充值成功");
+            } else {
+              window.ELEMENT.Message.error(res.msg || "充值失败");
+            }
+          })
+          .catch(() => {
+            window.ELEMENT.Message.error("系统错误");
+          });
+      });
+    },
+  },
 };
 </script>
 

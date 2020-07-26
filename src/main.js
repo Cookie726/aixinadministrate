@@ -32,7 +32,6 @@ router.beforeEach((to, _, next) => {
     });
   }
 })
-
 router.afterEach(to => {
   var routerList = to.matched;
   document.title = to.meta.name;
@@ -41,7 +40,6 @@ router.afterEach(to => {
   store.commit("setEditableTabs", to);
 });
 Vue.config.productionTip = false;
-
 new Vue({
   router,
   store,

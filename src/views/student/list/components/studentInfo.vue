@@ -63,7 +63,7 @@
                     <td width="7%" align="center">服装账户余额</td>
                     <td bgcolor="#FFFFFF" align="center">
                       <el-input
-                        v-model="dataForm.balanceFuzhuang"
+                        v-model.number="dataForm.balanceFuzhuang"
                         style="width: 60%;"
                         size="small"
                       >
@@ -73,7 +73,7 @@
                     <td width="7%" align="center">日用品账户余额</td>
                     <td bgcolor="#FFFFFF" align="center">
                       <el-input
-                        v-model="dataForm.balanceRiyong"
+                        v-model.number="dataForm.balanceRiyong"
                         style="width: 60%;"
                         size="small"
                       >
@@ -119,9 +119,23 @@ export default {
         balanceFuzhuang: this.dataForm.balanceFuzhuang,
         studentId: this.dataForm.id,
       };
+      if (data.balanceRiyong < 0 || data.balanceFuzhuang < 0) {
+        window.ELEMENT.MessageBox.alert("学生账户余额不能为负数", "提示");
+        return;
+      }
       window.ELEMENT.MessageBox.confirm("是否要修改学生信息", "提示").then(
         () => {
-          updateStudentInfo(data);
+          updateStudentInfo(data)
+            .then((res) => {
+              if (res.code === 0) {
+                window.ELEMENT.Message.success("修改成功");
+              } else {
+                window.ELEMENT.Message.error(res.msg || "修改失败");
+              }
+            })
+            .catch(() => {
+              window.ELEMENT.Message.error("系统错误");
+            });
         }
       );
     },

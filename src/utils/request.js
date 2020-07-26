@@ -1,9 +1,6 @@
 import axios from "axios"
 import router from "@/router/index"
 const BASE_URL = "http://www.liskarm.xyz/AixinMarket"
-// import {
-//     Message
-// } from "element-ui"
 const http = axios.create({
     timeout: 1000 * 5,
     withCredentials: true,
@@ -48,7 +45,7 @@ http.interceptors.response.use(function (response) {
             default:
                 break;
         }
-        return response.data
+        return response
     }
 }, function (error) {
     // 对响应错误做点什么

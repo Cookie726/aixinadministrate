@@ -14,7 +14,6 @@
 </template>
 
 <script>
-// import { Pagination } from "element-ui";
 export default {
   data() {
     return {
@@ -53,9 +52,6 @@ export default {
       });
     },
   },
-  // components: {
-  //   [Pagination.name]: Pagination
-  // }
 };
 </script>
 

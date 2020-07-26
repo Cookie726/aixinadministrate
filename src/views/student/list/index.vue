@@ -109,7 +109,7 @@ export default {
     query(event) {
       let data = {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       };
       // 修改查询条件
       Object.assign(this.formInline, event);
@@ -118,29 +118,35 @@ export default {
       // 初始分页
       this.pageConfig = data;
       // 请求数据
-      getStudentList(data).then(data => {
-        this.tableData = data.studentList;
-        this.total = data.total;
-      });
+      this.getList(data);
     },
     pageChange(event) {
       this.pageConfig.currentPage = event.currentPage;
       this.pageConfig.pageSize = event.pageSize;
       let data = Object.assign({}, this.formInline, event);
-      getStudentList(data).then(data => {
-        this.tableData = data.studentList;
-        this.total = data.total;
-      });
+      this.getList(data);
     },
     cancel() {
       this.showInfo = false;
-    }
+    },
+    getList(param) {
+      getStudentList(param)
+        .then(this.handleResponse)
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
+    handleResponse(res) {
+      if (res.code === 0) {
+        this.tableData = res.data.studentList;
+        this.total = res.data.total;
+      } else {
+        window.ELEMENT.Message.error(res.msg || "加载出错");
+      }
+    },
   },
   mounted() {
-    getStudentList(this.pageConfig).then(data => {
-      this.tableData = data.studentList;
-      this.total = data.total;
-    });
+    this.getList(this.pageConfig);
   },
   data() {
     return {
@@ -154,20 +160,20 @@ export default {
         specialId: "",
         state: "",
         grade: "",
-        imburseType: ""
+        imburseType: "",
       },
       tableData: [],
       pageConfig: {
         pageSize: 10,
-        currentPage: 1
-      }
+        currentPage: 1,
+      },
     };
   },
   components: {
     "ax-pager": AXPage,
     "ax-list-query": AXListQuery,
-    "ax-student-info": AXStudentInfo
-  }
+    "ax-student-info": AXStudentInfo,
+  },
 };
 </script>
 

@@ -75,36 +75,44 @@ export default {
         specialId: "",
         state: "",
         grade: "",
-        imburseType: ""
+        imburseType: "",
       },
       specialList: [],
       departmentList: [],
-      imburseTypeList: []
+      imburseTypeList: [],
     };
   },
   mounted() {
-    getIndexTable().then(res => {
-      this.specialList = res.specialList;
-      this.departmentList = res.departmentList;
-      this.imburseTypeList = res.imburseTypeList;
-    });
+    getIndexTable()
+      .then((res) => {
+        if (res.code === 0) {
+          this.specialList = res.data.specialList;
+          this.departmentList = res.data.departmentList;
+          this.imburseTypeList = res.data.imburseTypeList;
+        } else {
+          window.ELEMENT.Message.error(res.msg || "加载出错");
+        }
+      })
+      .catch(() => {
+        window.ELEMENT.Message.error("系统出错");
+      });
   },
   computed: {
     newSpecialList() {
       if (this.formInline.departmentId != "") {
         return this.specialList.filter(
-          item => item.departmentId === this.formInline.departmentId
+          (item) => item.departmentId === this.formInline.departmentId
         );
       } else {
         return this.specialList;
       }
-    }
+    },
   },
   methods: {
     onSubmit() {
       this.$emit("query", this.formInline);
-    }
-  }
+    },
+  },
 };
 </script>
 
