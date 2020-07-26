@@ -20,6 +20,12 @@ http.interceptors.response.use(function (response) {
                     type: "error"
                 })
                 break;
+            case 2001:
+                window.ELEMENT.Message({
+                    message: "参数不能为空",
+                    type: "error"
+                })
+                break;
             case 2003:
                 window.ELEMENT.Message({
                     message: "账号或密码错误",
@@ -83,7 +89,9 @@ export function post(url, data = {}) {
     return new Promise((resolve, reject) => {
         http.post(url, data)
             .then(response => {
-                resolve(response.data);
+                if (response && response.data) {
+                    resolve(response.data);
+                }
             }, err => {
                 reject(err)
             })

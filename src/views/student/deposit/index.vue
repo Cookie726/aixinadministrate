@@ -52,7 +52,10 @@ export default {
   },
   methods: {
     handleCharge() {
-      onCharge(this.form);
+      if (!this.form.imburseType) {
+        window.ELEMENT.Message.error("请选择资助对象");
+        return;
+      }
       window.ELEMENT.MessageBox.confirm("确认充值?", "确认消息").then(() => {
         onCharge(this.form)
           .then((res) => {
