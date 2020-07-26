@@ -116,10 +116,10 @@ export default {
       tableData: [],
       pageConfig: {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       },
       formInline: {},
-      total: 0
+      total: 0,
     };
   },
   mounted() {
@@ -130,24 +130,42 @@ export default {
       window.ELEMENT.MessageBox.confirm("是否要执行改操作?").then(() => {
         const req_data = {
           orderRecordId: id,
-          status: targetState
+          status: targetState,
         };
-        modifyState(req_data).then(() => {
-          this.setList(this.pageConfig);
-        });
+        modifyState(req_data)
+          .then(({ code, msg }) => {
+            if (code === 0) {
+              this.setList(this.pageConfig);
+              window.ELEMENT.Message.success("操作成功");
+            } else {
+              window.ELEMENT.Message.error(msg || "操作失败");
+            }
+          })
+          .catch(() => {
+            window.ELEMENT.Message.error("系统错误");
+          });
       });
     },
     handleDelete(id) {
       window.ELEMENT.MessageBox.confirm("是否要删除改订单").then(() => {
-        deleleOrder({ orderId: id }).then(() => {
-          this.setList(this.pageConfig);
-        });
+        deleleOrder({ orderId: id })
+          .then(({ code, msg }) => {
+            if (code === 0) {
+              this.setList(this.pageConfig);
+              window.ELEMENT.Message.success("删除成功");
+            } else {
+              window.ELEMENT.Message.error(msg || "删除失败");
+            }
+          })
+          .catch(() => {
+            window.ELEMENT.Message.error("系统错误");
+          });
       });
     },
     query(event) {
       let data = {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       };
       // 修改查询条件
       Object.assign(this.formInline, event);
@@ -165,11 +183,19 @@ export default {
       this.setList(data);
     },
     setList(data) {
-      getOrderList(data).then(({ total, orderRecordList }) => {
-        this.total = total;
-        this.tableData = orderRecordList;
-      });
-    }
+      getOrderList(data)
+        .then(({ code, msg, data }) => {
+          if (code === 0) {
+            this.total = data.total;
+            this.tableData = data.orderRecordList;
+          } else {
+            window.ELEMENT.Message.error(msg || "获取失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
   },
   computed: {
     tagType() {
@@ -184,12 +210,12 @@ export default {
           return "info";
         }
       };
-    }
+    },
   },
   components: {
     "ax-pager": AXPager,
-    "ax-campus-query": AXCampusQuery
-  }
+    "ax-campus-query": AXCampusQuery,
+  },
 };
 </script>
 
