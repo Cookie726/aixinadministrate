@@ -63,16 +63,25 @@ import { getStockRecord, deleteRecord } from "@/api/stock";
 export default {
   methods: {
     deleteRecord(id) {
-      window.ELEMENT.MessageBox.confirm("是否要删除改记录？", "提示").then(() => {
-        deleteRecord({ retrievalId: id }).then(() => {
-          this.setList(this.pageConfig);
+      window.ELEMENT.MessageBox.confirm("是否要删除改记录？", "提示")
+        .then(() => {
+          deleteRecord({ retrievalId: id }).then(({ code, msg }) => {
+            if (code === 0) {
+              window.ELEMENT.Message.success("删除成功");
+              this.setList(this.pageConfig);
+            } else {
+              window.ELEMENT.Message.error(msg || "删除失败");
+            }
+          });
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
         });
-      });
     },
     query(event) {
       let data = {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       };
       // 修改查询条件
       Object.assign(this.formInline, event);
@@ -90,11 +99,19 @@ export default {
       this.setList(data);
     },
     setList(data) {
-      getStockRecord(data).then(res => {
-        this.total = res.total;
-        this.tableData = res.recordList;
-      });
-    }
+      getStockRecord(data)
+        .then((res) => {
+          if (res.code === 0) {
+            this.total = res.data.total;
+            this.tableData = res.data.recordList;
+          } else {
+            window.ELEMENT.Message.error(res.msg || "获取失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
   },
   mounted() {
     this.setList(this.pageConfig);
@@ -104,16 +121,16 @@ export default {
       tableData: [],
       pageConfig: {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       },
       formInline: {},
-      total: 0
+      total: 0,
     };
   },
   components: {
     "ax-pager": AXPage,
-    "ax-record-query": AXRecordQuery
-  }
+    "ax-record-query": AXRecordQuery,
+  },
 };
 </script>
 
