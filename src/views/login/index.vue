@@ -80,9 +80,9 @@ export default {
       this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
     },
     handleLogin() {
-      login(this.loginForm).then(({ name, id }) => {
+      login(this.loginForm).then(({ data }) => {
         window.ELEMENT.Message.success("登录成功");
-        this.$store.commit("user/LOGIN", { name, id });
+        this.$store.commit("user/LOGIN", { name: data.name, id: data.id });
         this.$router.replace({ name: "studentList" });
       });
     },

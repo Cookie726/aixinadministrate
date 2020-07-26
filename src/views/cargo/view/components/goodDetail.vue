@@ -82,16 +82,24 @@ export default {
   data() {
     return {
       goodsTypeList: {},
-      dialogFormVisible: false
+      dialogFormVisible: false,
     };
   },
   props: {
-    detail: Object
+    detail: Object,
   },
   mounted() {
-    getIndexTable().then(res => {
-      this.goodsTypeList = res.goodsTypeList;
-    });
+    getIndexTable()
+      .then((res) => {
+        if (res.code === 0) {
+          this.goodsTypeList = res.data.goodsTypeList;
+        } else {
+          window.ELEMENT.Message.error(res.msg || "获取失败");
+        }
+      })
+      .catch(() => {
+        window.ELEMENT.Message.error("系统错误");
+      });
   },
   methods: {
     addGoodType() {
@@ -101,15 +109,32 @@ export default {
       if (this.detail.limitBuyNum === -1) {
         this.detail.limitBuyType = null;
       }
-      updateGoods(this.detail).then(() => {
-        this.$emit("fresh");
-      });
+      updateGoods(this.detail)
+        .then((res) => {
+          if (res.code === 0) {
+            this.$emit("fresh");
+            window.ELEMENT.Message.success("修改成功");
+          } else {
+            window.ELEMENT.Message.error(res.msg || "修改失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
     },
     handleConfirm() {
       this.dialogFormVisible = false;
-      getIndexTable().then(res => {
-        this.goodsTypeList = res.goodsTypeList;
-      });
+      getIndexTable()
+        .then((res) => {
+          if (res.code === 0) {
+            this.goodsTypeList = res.data.goodsTypeList;
+          } else {
+            window.ELEMENT.Message.error(res.msg || "获取失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
     },
     onCancel() {
       this.$emit("cancel");
@@ -117,13 +142,22 @@ export default {
     uploadImg(f) {
       let formData = new FormData();
       formData.append("imgFile", f.file);
-      uploadImage(formData).then(res => {
-        this.detail.images = res.filepath;
-      });
-    }
+      uploadImage(formData)
+        .then((res) => {
+          if (res.code === 0) {
+            this.detail.images = res.data.filepath;
+            window.ELEMENT.Message.success("上传成功");
+          } else {
+            window.ELEMENT.Message.error(res.msg || "上传失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
   },
   components: {
-    "add-good-type": AddGoodType
-  }
+    "add-good-type": AddGoodType,
+  },
 };
 </script>

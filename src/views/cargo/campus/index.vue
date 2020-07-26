@@ -27,7 +27,7 @@
         <el-table-column min-width="90" width="300" align="center" label="操作">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)" size="small"
-              >修改</el-button
+              >修改库存</el-button
             >
             <el-button
               type="text"
@@ -45,7 +45,11 @@
         :total="total"
       />
     </div>
-    <el-dialog title="修改" :visible.sync="dialogFormVisible">
+    <el-dialog
+      title="修改"
+      :close-on-click-modal="false"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form>
         <el-form-item label="库存" label-width="80">
           <el-input v-model="editNum" autocomplete="off"></el-input>
@@ -95,10 +99,19 @@ export default {
       updateWareHouse({
         num: this.editNum,
         wareHouseId: this.editWareHouseId,
-      }).then(() => {
-        this.dialogFormVisible = false;
-        this.setList(this.pageConfig);
-      });
+      })
+        .then((res) => {
+          if (res.code === 0) {
+            this.dialogFormVisible = false;
+            this.setList(this.pageConfig);
+            window.ELEMENT.Message.success("修改成功");
+          } else {
+            window.ELEMENT.Message.success(res.msg || "修改失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
     },
     query(event) {
       let data = {
@@ -122,16 +135,33 @@ export default {
     },
     handleDelete(id) {
       window.ELEMENT.MessageBox.confirm("是否要删除改库存记录?").then(() => {
-        deleteWareHouse({ wareHouseId: id }).then(() => {
-          this.dialogFormVisible = false;
-        });
+        deleteWareHouse({ wareHouseId: id })
+          .then((res) => {
+            if (res.code === 0) {
+              window.ELEMENT.Message.success("删除成功");
+              this.setList(this.pageConfig);
+            } else {
+              window.ELEMENT.Message.success(res.msg || "删除失败");
+            }
+          })
+          .catch(() => {
+            window.ELEMENT.Message.error("系统错误");
+          });
       });
     },
     setList(data) {
-      getWareList(data).then(({ wareHouseList, total }) => {
-        this.tableData = wareHouseList;
-        this.total = total;
-      });
+      getWareList(data)
+        .then((res) => {
+          if (res.code === 0) {
+            this.tableData = res.data.wareHouseList;
+            this.total = res.data.total;
+          } else {
+            window.ELEMENT.Message.error(res.msg || "获取失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
     },
   },
   components: {

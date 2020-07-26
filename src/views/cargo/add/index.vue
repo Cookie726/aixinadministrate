@@ -72,7 +72,7 @@
         >
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+        <el-button type="primary" @click="onSubmit('form')">立即添加</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -89,7 +89,7 @@ import {
   validateBarcode,
   validatePrice,
   validateSpecs,
-  isEmpty
+  isEmpty,
 } from "@/utils/validate";
 import { getGoodsTypeQueryIndexTable } from "@/api/indexTable";
 import { addGoods } from "@/api/cargo";
@@ -120,41 +120,49 @@ export default {
         images: "",
         goodsType: "",
         limitBuyNum: -1,
-        limitBuyType: ""
+        limitBuyType: "",
       },
       rules: {
         barcode: [
           {
             validator: _validateBarcode,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         price: [
           {
             validator: _validatePrice,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         specs: [
           {
             validator: _validateSpecs,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         goodsType: [
           {
             validator: _validateGoodsType,
-            trigger: "change"
-          }
-        ]
+            trigger: "change",
+          },
+        ],
       },
-      goodsTypeList: []
+      goodsTypeList: [],
     };
   },
   mounted() {
-    getGoodsTypeQueryIndexTable().then(res => {
-      this.goodsTypeList = res.goodsTypeList;
-    });
+    getGoodsTypeQueryIndexTable()
+      .then((res) => {
+        if (res.code === 0) {
+          this.goodsTypeList = res.data.goodsTypeList;
+        } else {
+          window.ELEMENT.Message.error(res.msg || "获取失败");
+        }
+      })
+      .catch(() => {
+        window.ELEMENT.Message.error("系统错误");
+      });
   },
   methods: {
     addGoodType() {
@@ -163,16 +171,26 @@ export default {
     onExceed() {
       window.ELEMENT.Message({
         message: "商品图片只能选取一张",
-        type: "error"
+        type: "error",
       });
     },
     onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.form.limitBuyNum === -1) {
             this.form.limitBuyType = null;
           }
-          addGoods(this.form);
+          addGoods(this.form)
+            .then((res) => {
+              if (res.code === 0) {
+                window.ELEMENT.Message.success("添加成功");
+              } else {
+                window.ELEMENT.Message.error(res.msg || "添加失败");
+              }
+            })
+            .catch(() => {
+              window.ELEMENT.error("系统错误");
+            });
         } else {
           return false;
         }
@@ -181,13 +199,22 @@ export default {
     uploadImg(f) {
       let formData = new FormData();
       formData.append("imgFile", f.file);
-      uploadImage(formData).then(res => {
-        this.form.images = res.filepath;
-      });
-    }
+      uploadImage(formData)
+        .then((res) => {
+          if (res.code === 0) {
+            this.form.images = res.data.filepath;
+            window.ELEMENT.Message.success("上传成功");
+          } else {
+            window.ELEMENT.Message.success(res.msg || "上传失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
   },
   components: {
-    "add-good-type": AddGoodType
-  }
+    "add-good-type": AddGoodType,
+  },
 };
 </script>

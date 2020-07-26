@@ -98,12 +98,12 @@ export default {
       tableData: [],
       pageConfig: {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       },
       formInline: {},
       showDetail: false,
       detail: {},
-      total: 0
+      total: 0,
     };
   },
   methods: {
@@ -117,13 +117,23 @@ export default {
     },
     handleDelete(id) {
       window.ELEMENT.MessageBox.confirm("是否要删除该商品？").then(() => {
-        deleteDepository({ id });
+        deleteDepository({ id })
+          .then((res) => {
+            if (res.code === 0) {
+              window.ELEMENT.Message.success("删除成功");
+            } else {
+              window.ELEMENT.Message.error(res.msg || "删除失败");
+            }
+          })
+          .catch(() => {
+            window.ELEMENT.Message.error("系统错误");
+          });
       });
     },
     query(event) {
       let data = {
         pageSize: 10,
-        currentPage: 1
+        currentPage: 1,
       };
       // 修改查询条件
       Object.assign(this.formInline, event);
@@ -144,11 +154,19 @@ export default {
       this.showDetail = false;
     },
     setList(data) {
-      getGoodsList(data).then(({ goodsList, total }) => {
-        this.tableData = goodsList;
-        this.total = total;
-      });
-    }
+      getGoodsList(data)
+        .then(({ code, msg, data }) => {
+          if (code === 0) {
+            this.tableData = data.goodsList;
+            this.total = data.msgtotal;
+          } else {
+            window.ELEMENT.Message.error(msg || "获取失败");
+          }
+        })
+        .catch(() => {
+          window.ELEMENT.Message.error("系统错误");
+        });
+    },
   },
   mounted() {
     this.setList(this.pageConfig);
@@ -156,8 +174,8 @@ export default {
   components: {
     "ax-pager": AXPager,
     "ax-view-query": AXViewQuery,
-    "ax-good-detail": AXGoodDetail
-  }
+    "ax-good-detail": AXGoodDetail,
+  },
 };
 </script>
 

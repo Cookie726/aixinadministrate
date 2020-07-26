@@ -34,21 +34,27 @@ export default {
     };
   },
   methods: {
-    handleClick() {
+    async handleClick() {
       if (!this.classification) {
         window.ELEMENT.Message.error("商品种类不能为空");
         return;
       }
-      addGoodType({ classification: this.classification });
+      try {
+        let res = await addGoodType({ classification: this.classification });
+        if (res.code === 0) {
+          window.ELEMENT.Message.success("新增成功");
+        } else {
+          window.ELEMENT.Message.error(res.msg || "新增失败");
+        }
+      } catch {
+        window.ELEMENT.Message.error("系统错误");
+      }
       this.$emit("confirm");
     },
     cancel() {
       this.$emit("cancel");
     },
   },
-  // components: {
-  //   [Dialog.name]: Dialog
-  // },
 };
 </script>
 
